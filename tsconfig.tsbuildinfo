@@ -1,1 +1,0 @@
-{"root":["./backend/src/index.ts","./backend/src/validation/signup/signupvalidate.ts","./backend/src/validation/signup/signupschema.ts","./backend/src/controllers/authcontroller.ts","./backend/src/db/connectdb.ts","./backend/src/models/usermodel.ts","./backend/src/routes/authroutes.ts"],"version":"5.7.2"}
