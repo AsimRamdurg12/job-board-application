@@ -1,11 +1,10 @@
 import express from "express";
-import { login, signup } from "../controllers/AuthController";
-import { SignUpValidate } from "../middlewares/Validation/signup/SignUpValidate";
-import { signupSchema } from "../middlewares/Validation/signup/SignupSchema";
+import { login, logout, signup } from "../controllers/AuthController";
 
 const router = express.Router();
-//@ts-ignore
-router.post("/signup", SignUpValidate(signupSchema), signup);
+
+router.post("/signup", signup);
 router.post("/login", login);
+router.post("/logout", logout);
 
 export default router;

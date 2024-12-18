@@ -1,6 +1,6 @@
 import mongoose, { model, Schema, Types } from "mongoose";
 
-interface company {
+export interface company {
   name: string;
   description: string;
   website: string;
@@ -19,7 +19,6 @@ const CompanySchema: Schema<company> = new Schema(
     UserId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
   },
   { timestamps: true }
