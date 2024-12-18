@@ -6,7 +6,7 @@ export interface company {
   website: string;
   logo: string;
   location: string;
-  UserId: Types.ObjectId;
+  userId: Types.ObjectId;
 }
 
 const CompanySchema: Schema<company> = new Schema(
@@ -16,9 +16,10 @@ const CompanySchema: Schema<company> = new Schema(
     website: { type: String, required: true },
     logo: { type: String },
     location: { type: String },
-    UserId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
   },
   { timestamps: true }
