@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import Authroutes from "./routes/AuthRoutes";
 import Companyroutes from "./routes/CompanyRoutes";
+import Jobroutes from "./routes/JobRoutes";
 
 const app = express();
 dotenv.config();
@@ -21,6 +22,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/auth", Authroutes);
 app.use("/api/company", Companyroutes);
+app.use("/api/job", Jobroutes);
 
 app.listen(PORT, async () => {
   console.log(`Running on http://localhost:${PORT}`);

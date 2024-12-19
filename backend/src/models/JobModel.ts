@@ -4,10 +4,11 @@ interface job {
   title: string;
   description: string;
   requirements: string[];
-  salary: number;
+  salary: string;
   experienceLevel: string;
   location: string;
   jobType: string;
+  position: string;
   company: Types.ObjectId;
   createdBy: Types.ObjectId;
   applications: Types.ObjectId[];
@@ -18,10 +19,11 @@ const JobSchema: Schema<job> = new Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     requirements: [{ type: String, required: true }],
-    salary: { type: Number, required: true },
+    salary: { type: String, required: true },
     experienceLevel: { type: String, required: true },
     location: { type: String },
     jobType: { type: String },
+    position: { type: String },
     company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",

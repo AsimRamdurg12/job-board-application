@@ -104,6 +104,11 @@ export const updateCompany = async (req: Request, res: Response) => {
 
     let company = await CompanyModel.findById(companyId, userId);
 
+    if (company?.userId !== user._id) {
+      res.status(403).json("Only company admin can update company details.");
+      return;
+    }
+
     const updatedDetails = await company?.updateOne({
       name,
       description,
