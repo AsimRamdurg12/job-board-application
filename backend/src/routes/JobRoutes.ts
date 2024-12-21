@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/create", Protect, createJob);
 router.get("/jobs", Protect, getAllJobs);
-router.get("/:id", Protect, getJobById);
 router.get("/myjobs", Protect, getMyJobs);
+router.get("/:id", Protect, getJobById);
 
 export default router;

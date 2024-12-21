@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserModel } from "../models/UserModel";
 import bcrypt from "bcryptjs";
+import { v2 as cloudinary } from "cloudinary";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
 
@@ -107,5 +108,92 @@ export const logout = async (req: Request, res: Response) => {
     console.log("error in logout", error.message);
     res.status(500).json("internal server error");
     return;
+  }
+};
+
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const userId = req.id;
+
+    let {
+      name,
+      email,
+      mobile,
+      currentPassword,
+      newPassword,
+      bio,
+      skills,
+      resumeOriginalName,
+    } = req.body;
+
+    let { resume, profilePhoto } = req.body;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      res.status(403).json("user not found");
+      return;
+    }
+
+    if (
+      (!newPassword && currentPassword) ||
+      (!currentPassword && newPassword)
+    ) {
+      res
+        .status(400)
+        .json("Please provide both current password and new password");
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user?.password || "");
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    if (currentPassword && newPassword) {
+      if (!isMatch) {
+        res.status(403).json("Password doesn't match");
+        return;
+      }
+      if (user?.password === hashed) {
+        res
+          .status(401)
+          .json("Current Password and new Password must be different");
+        return;
+      }
+    }
+
+    if (profilePhoto) {
+      if (user.profile.profilePhoto) {
+        await cloudinary.uploader.destroy(user?.profile?.profilePhoto);
+      }
+      const cloudResponse = cloudinary.uploader.upload(profilePhoto);
+      profilePhoto = (await cloudResponse).secure_url;
+    }
+
+    if (resume) {
+      if (user.profile.resume) {
+        await cloudinary.uploader.destroy(user?.profile?.resume);
+      }
+      const cloudResponse = cloudinary.uploader.upload(resume);
+      resume = (await cloudResponse).secure_url;
+    }
+
+    user.name = user.name || name;
+    user.email = user.email || email;
+    user.mobile = user.mobile || mobile;
+    user.profile.bio = user.profile.bio || bio;
+    user.profile.skills = user.profile.skills || skills.split(",");
+    user.profile.resumeOriginalName =
+      user.profile.resumeOriginalName || resumeOriginalName;
+
+    let updatedUser = await user.save();
+
+    if (updatedUser) {
+      res.status(200).json({ updatedUser });
+      return;
+    }
+  } catch (error: any) {
+    console.log("error in updateProfile", error.message);
+    res.status(500).json("internal server error");
   }
 };

@@ -3,14 +3,22 @@ import * as dotenv from "dotenv";
 import { ConnectDB } from "./db/connectDB";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import Authroutes from "./routes/AuthRoutes";
-import Companyroutes from "./routes/CompanyRoutes";
-import Jobroutes from "./routes/JobRoutes";
+import { v2 as cloudinary } from "cloudinary";
+import AuthRoutes from "./routes/AuthRoutes";
+import CompanyRoutes from "./routes/CompanyRoutes";
+import JobRoutes from "./routes/JobRoutes";
+import ApplicationRoutes from "./routes/ApplicationRoutes";
 
 const app = express();
 dotenv.config();
 
-app.use(express.json());
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+app.use(express.json({ limit: "5mb" }));
 app.use(cors());
 app.use(cookieParser());
 
@@ -20,9 +28,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello Asim");
 });
 
-app.use("/api/auth", Authroutes);
-app.use("/api/company", Companyroutes);
-app.use("/api/job", Jobroutes);
+app.use("/api/auth", AuthRoutes);
+app.use("/api/company", CompanyRoutes);
+app.use("/api/job", JobRoutes);
+app.use("/api/apply", ApplicationRoutes);
 
 app.listen(PORT, async () => {
   console.log(`Running on http://localhost:${PORT}`);

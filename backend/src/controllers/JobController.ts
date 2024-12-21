@@ -88,6 +88,30 @@ export const getAllJobs = async (req: Request, res: Response) => {
   }
 };
 
+export const getMyJobs = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const userId = req.id;
+
+    const user = await UserModel.findById(userId);
+
+    const myJobs = await JobModel.find({
+      createdBy: user?._id,
+    });
+
+    if (!myJobs) {
+      res.status(404).json("no jobs found");
+      return;
+    } else {
+      res.status(200).json(myJobs);
+      return;
+    }
+  } catch (error) {
+    console.log("error in getMyJobs", error);
+    res.status(500).json("internal server error");
+  }
+};
+
 export const getJobById = async (req: Request, res: Response) => {
   try {
     const jobId = req.params.id;
@@ -103,36 +127,8 @@ export const getJobById = async (req: Request, res: Response) => {
       res.status(200).json(job);
       return;
     }
-  } catch (error) {
-    console.log("error in getJobById", error);
-    res.status(500).json("internal server error");
-  }
-};
-
-export const getMyJobs = async (req: Request, res: Response) => {
-  try {
-    //@ts-ignore
-    const userId = req.id;
-
-    const user = await UserModel.findById(userId);
-
-    console.log(user?._id);
-
-    const myJobs = await JobModel.find({
-      createdBy: user?._id,
-    });
-
-    console.log(myJobs);
-
-    if (!myJobs) {
-      res.status(404).json("no jobs found");
-      return;
-    } else {
-      res.status(200).json(myJobs);
-      return;
-    }
-  } catch (error) {
-    console.log("error in getMyJobs", error);
+  } catch (error: any) {
+    console.log("error in getJobById", error.message);
     res.status(500).json("internal server error");
   }
 };

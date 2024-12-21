@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { CompanyModel } from "../models/CompanyModel";
 import { UserModel } from "../models/UserModel";
-import mongoose from "mongoose";
 
 export const registerCompany = async (req: Request, res: Response) => {
   try {
@@ -37,8 +36,8 @@ export const registerCompany = async (req: Request, res: Response) => {
       message: "Company registered successfully",
       register,
     });
-  } catch (error) {
-    console.log("error in registerCompany", error);
+  } catch (error: any) {
+    console.log("error in registerCompany", error.message);
     res.status(500).json("internal server error");
     return;
   }
@@ -58,8 +57,8 @@ export const getCompany = async (req: Request, res: Response) => {
       res.status(200).json(companies);
       return;
     }
-  } catch (error) {
-    console.log("error in getCompany", error);
+  } catch (error: any) {
+    console.log("error in getCompany", error.message);
     res.status(500).json("internal server error");
   }
 };
@@ -79,8 +78,8 @@ export const getCompanybyId = async (req: Request, res: Response) => {
       message: "Company found!",
       company,
     });
-  } catch (error) {
-    console.log("error in getCompanybyId", error);
+  } catch (error: any) {
+    console.log("error in getCompanybyId", error.message);
     res.status(500).json("internal server error");
   }
 };
@@ -123,8 +122,8 @@ export const updateCompany = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ updatedDetails });
-  } catch (error) {
-    console.log("error in updateCompany", error);
+  } catch (error: any) {
+    console.log("error in updateCompany", error.message);
     res.status(500).json("internal server error");
   }
 };
