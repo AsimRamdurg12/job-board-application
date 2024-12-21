@@ -132,7 +132,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      res.status(403).json("user not found");
+      res.status(403).json("User not found");
       return;
     }
 
@@ -146,56 +146,67 @@ export const updateProfile = async (req: Request, res: Response) => {
       return;
     }
 
-    const isMatch = await bcrypt.compare(currentPassword, user?.password || "");
-    const hashed = await bcrypt.hash(newPassword, 10);
-
     if (currentPassword && newPassword) {
+      if (!user?.password) {
+        res.status(400).json("User does not have a password set");
+        return;
+      }
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+
       if (!isMatch) {
         res.status(403).json("Password doesn't match");
         return;
       }
-      if (user?.password === hashed) {
+
+      const hashed = await bcrypt.hash(newPassword, 10);
+
+      if (user.password === hashed) {
         res
           .status(401)
           .json("Current Password and new Password must be different");
         return;
       }
+
+      user.password = hashed;
     }
 
-    user.password = hashed;
-
     if (profilePhoto) {
-      if (user.profile.profilePhoto) {
-        await cloudinary.uploader.destroy(user?.profile?.profilePhoto);
+      if (user.profile?.profilePhoto) {
+        await cloudinary.uploader.destroy(user.profile.profilePhoto);
       }
-      const cloudResponse = cloudinary.uploader.upload(profilePhoto);
-      profilePhoto = (await cloudResponse).secure_url;
+      const cloudResponse = await cloudinary.uploader.upload(profilePhoto);
+      profilePhoto = cloudResponse.secure_url;
+      user.profile.profilePhoto = profilePhoto;
     }
 
     if (resume) {
-      if (user.profile.resume) {
-        await cloudinary.uploader.destroy(user?.profile?.resume);
+      if (user.profile?.resume) {
+        await cloudinary.uploader.destroy(user.profile.resume);
       }
-      const cloudResponse = cloudinary.uploader.upload(resume);
-      resume = (await cloudResponse).secure_url;
+      const cloudResponse = await cloudinary.uploader.upload(resume);
+      resume = cloudResponse.secure_url;
+      user.profile.resume = resume;
+      user.profile.resumeOriginalName =
+        resumeOriginalName || user.profile.resumeOriginalName;
     }
 
-    user.name = user.name || name;
-    user.email = user.email || email;
-    user.mobile = user.mobile || mobile;
-    user.profile.bio = user.profile.bio || bio;
-    user.profile.skills = user.profile.skills || skills.split(",");
-    user.profile.resumeOriginalName =
-      user.profile.resumeOriginalName || resumeOriginalName;
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (mobile) user.mobile = mobile;
+    if (bio) user.profile.bio = bio;
+    if (skills) {
+      user.profile.skills = typeof skills === "string" ? skills.split(",") : [];
+    }
 
-    let updatedUser = await user.save();
+    const updatedUser = await user.save();
 
     if (updatedUser) {
       res.status(200).json({ updatedUser });
       return;
     }
   } catch (error: any) {
-    console.log("error in updateProfile", error.message);
-    res.status(500).json("internal server error");
+    console.error("Error in updateProfile:", error.message);
+    res.status(500).json("Internal server error");
   }
 };
