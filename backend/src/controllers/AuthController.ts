@@ -162,6 +162,8 @@ export const updateProfile = async (req: Request, res: Response) => {
       }
     }
 
+    user.password = hashed;
+
     if (profilePhoto) {
       if (user.profile.profilePhoto) {
         await cloudinary.uploader.destroy(user?.profile?.profilePhoto);
