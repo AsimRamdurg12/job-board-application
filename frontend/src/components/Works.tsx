@@ -3,11 +3,13 @@ import heart from "../assets/heartbreak.svg";
 import feedback from "../assets/feedback.svg";
 import description from "../assets/description.svg";
 import JobDesc from "../assets/jobdesc.jpg";
+import recruiter from "../assets/employer.png";
+import application from "../assets/application.png";
 
 const Works = () => {
   return (
     <div className="mt-20 mx-2">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 mx-4 place-items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mx-4 place-items-center">
         <img
           src={JobSeeker}
           alt="Job Seeker"
@@ -53,7 +55,7 @@ const Works = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center mt-10">
+      <div className="flex flex-col justify-center gap-4 items-center mt-10">
         <p className="w-fit px-4 py-2 bg-orange-100 rounded-full">
           The Solution
         </p>
@@ -62,17 +64,38 @@ const Works = () => {
           <span className="text-orange-500"> solution</span> to your
           <span className="text-orange-500"> dream job.</span>
         </h1>
-        <div className="w-full h-full border bg-orange-100 rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-4 gap-4 my-4 border bg-white rounded-lg">
-            <div className="border m-4 ">
+        <div className="w-full h-full border bg-orange-300 rounded-3xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-4 p-5 gap-4 border bg-white rounded-2xl">
+            <div className="w-full h-full flex flex-col items-center gap-2">
               <img
                 src={JobDesc}
                 alt=""
-                className="object-contain h-full w-full"
+                className="object-contain h-full w-full rounded-lg shadow-lg border-8 border-blue-200"
               />
+              <p className="text-lg text-gray-500">
+                Accurate Job Descriptions for better clarity.
+              </p>
             </div>
-            <div className="w-10 h-10">There</div>
-            <div className="w-10 h-10">Asim</div>
+            <div className="w-fit h-fit flex flex-col items-center gap-2">
+              <img
+                src={recruiter}
+                alt="recruiter giving feedback"
+                className="object-contain h-full w-full rounded-lg shadow-lg border-8 border-blue-200"
+              />
+              <p className="text-lg text-gray-500">
+                Feedback from recruiters for better improvement
+              </p>
+            </div>
+            <div className="w-fit h-fit flex flex-col items-center gap-2">
+              <img
+                src={application}
+                alt="recruiter giving feed"
+                className="object-contain h-full w-full rounded-lg shadow-lg border-8 border-blue-200"
+              />
+              <p className="text-lg text-gray-500">
+                Hassle free process to get hired.
+              </p>
+            </div>
           </div>
         </div>
       </div>
