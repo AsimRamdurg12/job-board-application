@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -23,15 +24,15 @@ const Login: React.FC = () => {
   });
 
   const handleLogin = async (data: LoginFormInputs) => {
-    // const res = await fetch("http://localhost:3000/api/auth/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
+    const response = await axios.post("http://localhost:3000/api/auth/login", {
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    });
 
-    // data = await res.json();
-    console.log(data);
+    const jwt = response.data.token;
+    localStorage.setItem("jwt", jwt);
+    console.log(response);
   };
 
   return (
