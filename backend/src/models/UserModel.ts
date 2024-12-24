@@ -3,7 +3,7 @@ import mongoose, { model, Schema, Types } from "mongoose";
 export interface user {
   name: string;
   email: string;
-  mobile: number;
+  mobile: string;
   password: string;
   role: "employee" | "recruiter";
   profile: {
@@ -20,7 +20,7 @@ const UserSchema: Schema<user> = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    mobile: { type: Number, required: true, unique: true },
+    mobile: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["employee", "recruiter"], required: true },
     profile: {

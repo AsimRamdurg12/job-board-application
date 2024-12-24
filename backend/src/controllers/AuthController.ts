@@ -10,7 +10,7 @@ export const signup = async (req: Request, res: Response) => {
     const requiredBody = z.object({
       name: z.string().min(1, "Name is required"),
       email: z.string().email("Invalid email address"),
-      mobile: z.number().min(10, "mobile number must be of 10 digits"),
+      mobile: z.string().min(10, "mobile number must be of 10 digits"),
       password: z
         .string()
         .min(8, "Password must be at least 8 characters long"),
@@ -27,7 +27,10 @@ export const signup = async (req: Request, res: Response) => {
 
     const existingUser = await UserModel.findOne({ email });
 
-    if (existingUser) res.json("user already exists");
+    if (existingUser) {
+      res.json("user already exists");
+      return;
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
