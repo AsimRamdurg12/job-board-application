@@ -32,12 +32,12 @@ const Login: React.FC = () => {
 
     const jwt = response.data.token;
     localStorage.setItem("jwt", jwt);
-    console.log(response);
+    console.log(response.data);
   };
 
   return (
     <section className="mt-36 flex justify-center">
-      <div className="h-full pb-8 w-fit flex flex-col px-8 sm:px-16 md:px-24 border shadow-lg bg-white mx-4 rounded-xl">
+      <div className="h-full pb-8 w-full sm:w-fit flex flex-col sm:px-24 border shadow-lg bg-white mx-4 rounded-xl">
         <h1 className="text-center my-5 text-3xl font-bold text-blue-600">
           Login
         </h1>
@@ -57,7 +57,7 @@ const Login: React.FC = () => {
                 id="email"
                 placeholder="someone@example.com"
                 {...register("email")}
-                className="border px-4 py-2 rounded-xl outline-none shadow-md"
+                className="border px-4 py-2 rounded-xl outline-blue-500 w-72 sm:w-80 shadow-md"
               />
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
                 id="password"
                 placeholder="Enter Password"
                 {...register("password")}
-                className="border px-4 py-2 rounded-xl outline-none shadow-md"
+                className="border px-4 py-2 rounded-xl outline-blue-500 w-72 sm:w-80 shadow-md"
               />
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
@@ -86,7 +86,7 @@ const Login: React.FC = () => {
               <label className="font-medium">Role</label>
               <select
                 {...register("role")}
-                className="border px-4 py-2 rounded-xl outline-none shadow-md"
+                className="border px-4 py-2 rounded-xl outline-blue-500 w-72 sm:w-80 shadow-md"
               >
                 <option>Select...</option>
                 <option value="recruiter">Recruiter</option>

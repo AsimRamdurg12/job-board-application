@@ -190,8 +190,6 @@ export const updateProfile = async (req: Request, res: Response) => {
       const cloudResponse = await cloudinary.uploader.upload(resume);
       resume = cloudResponse.secure_url;
       user.profile.resume = resume;
-      user.profile.resumeOriginalName =
-        resumeOriginalName || user.profile.resumeOriginalName;
     }
 
     if (name) user.name = name;
@@ -207,6 +205,25 @@ export const updateProfile = async (req: Request, res: Response) => {
     if (updatedUser) {
       res.status(200).json({ updatedUser });
       return;
+    }
+  } catch (error: any) {
+    console.error("Error in updateProfile:", error.message);
+    res.status(500).json("Internal server error");
+  }
+};
+
+export const getProfile = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const userId = req.id;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      res.status(404).json("User not found");
+      return;
+    } else {
+      res.status(200).json(user);
     }
   } catch (error: any) {
     console.error("Error in updateProfile:", error.message);

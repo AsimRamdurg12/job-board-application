@@ -37,7 +37,7 @@ const SignUp: React.FC = () => {
 
   return (
     <section className="mt-24 flex justify-center">
-      <div className="h-full pb-8 w-full sm:w-fit sm:px-24  flex flex-col border shadow-lg bg-white mx-4 rounded-xl">
+      <div className="h-full pb-8 w-full sm:w-fit sm:px-24 flex flex-col border shadow-lg bg-white mx-4 rounded-xl">
         <h1 className="text-center my-5 text-3xl font-bold text-blue-600">
           Signup
         </h1>
@@ -57,7 +57,7 @@ const SignUp: React.FC = () => {
                 id="name"
                 placeholder="Full Name"
                 {...register("name")}
-                className="border px-4 py-2 rounded-xl outline-blue-500 shadow-md"
+                className="border px-4 py-2 rounded-xl w-72 sm:w-80 outline-blue-500 shadow-md"
               />
               {errors.name && (
                 <p className="text-red-500">{errors.name.message}</p>
@@ -73,7 +73,7 @@ const SignUp: React.FC = () => {
                 id="email"
                 placeholder="someone@example.com"
                 {...register("email")}
-                className="border px-4 py-2 w-80 rounded-xl outline-blue-500 shadow-md"
+                className="border px-4 py-2 w-72 sm:w-80 rounded-xl outline-blue-500 shadow-md"
               />
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
@@ -89,7 +89,7 @@ const SignUp: React.FC = () => {
                 id="mobile"
                 placeholder="Enter Mobile no."
                 {...register("mobile")}
-                className="border px-4 py-2 rounded-xl outline-blue-500 shadow-md"
+                className="border px-4 py-2 rounded-xl w-72 sm:w-80 outline-blue-500 shadow-md"
               />
               {errors.mobile && (
                 <p className="text-red-500">Please enter mobile no.</p>
@@ -105,7 +105,7 @@ const SignUp: React.FC = () => {
                 id="password"
                 placeholder="Enter Password"
                 {...register("password")}
-                className="border px-4 py-2 rounded-xl outline-blue-500 shadow-md"
+                className="border px-4 py-2 rounded-xl w-72 sm:w-80 outline-blue-500 shadow-md"
               />
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
@@ -118,7 +118,7 @@ const SignUp: React.FC = () => {
               <label className="font-medium">Role</label>
               <select
                 {...register("role")}
-                className="border px-4 py-2 rounded-xl outline-blue-500 shadow-md"
+                className="border px-4 py-2 rounded-xl w-72 sm:w-80 outline-blue-500 shadow-md"
               >
                 <option>Select...</option>
                 <option value="recruiter">Recruiter</option>
