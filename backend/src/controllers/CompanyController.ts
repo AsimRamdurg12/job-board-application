@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { CompanyModel } from "../models/CompanyModel";
 import { UserModel } from "../models/UserModel";
+import { JobModel } from "../models/JobModel";
 
 export const registerCompany = async (req: Request, res: Response) => {
   try {
-    const { name, description, website, logo, location } = req.body;
+    const { name, tagline, description, website, logo, location } = req.body;
 
     //@ts-ignore
     const userId = req.id;
@@ -25,6 +26,7 @@ export const registerCompany = async (req: Request, res: Response) => {
 
     const register = await CompanyModel.create({
       name: name,
+      tagline: tagline,
       description: description,
       website: website,
       logo: logo,
@@ -139,7 +141,42 @@ export const getAllCompanies = async (req: Request, res: Response) => {
       return;
     }
 
-    res.status(200).json({ companies });
+    res.status(200).json(companies);
+  } catch (error: any) {
+    console.log("error in getAllCompanies", error.message);
+    res.status(500).json("internal server error");
+  }
+};
+
+export const getCompanyJobs = async (req: Request, res: Response) => {
+  try {
+    //@ts-ignore
+    const userId = req.id;
+    const companyId = req.params.id;
+
+    const user = await UserModel.findById(userId);
+
+    if (user?.role !== "recruiter") {
+      res.status(403).json({ message: "employees cannot access this page" });
+      return;
+    }
+
+    const company = await CompanyModel.findById(companyId);
+
+    if (company?.userId.toString() !== user?._id.toString()) {
+      res.status(401).json({ message: "Only company admin can get the jobs" });
+      return;
+    }
+
+    const jobs = await JobModel.find({ company: company });
+
+    if (!jobs) {
+      res.status(404).json({ message: "unable to find jobs" });
+      return;
+    } else {
+      res.status(200).json(jobs);
+      return;
+    }
   } catch (error: any) {
     console.log("error in getAllCompanies", error.message);
     res.status(500).json("internal server error");

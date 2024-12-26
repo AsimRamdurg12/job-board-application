@@ -1,6 +1,6 @@
 import mongoose, { model, Schema, Types } from "mongoose";
 
-interface job {
+export interface job {
   title: string;
   description: string;
   requirements: string[];

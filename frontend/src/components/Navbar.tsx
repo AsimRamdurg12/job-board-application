@@ -1,34 +1,18 @@
 import { Link } from "react-router-dom";
 import Bar from "../assets/Bar";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+// import { useQuery } from "@tanstack/react-query";
+// import axios from "axios";
 import digitalocean from "../assets/digitalocean.svg";
+import useProfile from "../hooks/useProfile";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
-  const { data: authUser } = useQuery({
-    queryKey: ["authUser"],
-    queryFn: async () => {
-      try {
-        const res = await axios.get("/api/auth/get");
-        const data = await res.data;
-
-        if (!data) {
-          throw new Error(data.error);
-        }
-        return data;
-      } catch (error) {
-        console.log("error in authUser: ", error);
-      }
-    },
-    retry: false,
-  });
+  const authUser = useProfile();
 
   function handleClick() {
     setOpen(!open);
-    console.log(open);
   }
 
   return (

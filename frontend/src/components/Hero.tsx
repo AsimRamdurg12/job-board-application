@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import useProfile from "../hooks/useProfile";
 
 const Hero = () => {
+  const authUser = useProfile();
+
   return (
     <div className="flex flex-col items-center max-w-full bg-gradient-to-b from-orange-50 to-white mx-auto mt-20">
       <div className="max-w-4xl pb-10 mt-10 flex flex-col items-center text-center">
@@ -14,7 +17,7 @@ const Hero = () => {
           employers for seamless success.
         </h3>
         <Link
-          to="/signup"
+          to={`${authUser ? "/jobs" : "/signup"}`}
           className="flex justify-center mt-8 px-8 py-3 bg-blue-600 w-fit text-xl sm:text-2xl font-medium sm:font-bold text-white rounded-lg"
         >
           Get Started
