@@ -1,6 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -23,16 +26,47 @@ const Login: React.FC = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const handleLogin = async (data: LoginFormInputs) => {
-    const response = await axios.post("http://localhost:3000/api/auth/login", {
-      email: data.email,
-      password: data.password,
-      role: data.role,
-    });
+  const queryClient = useQueryClient();
 
-    const jwt = response.data.token;
-    localStorage.setItem("jwt", jwt);
-    console.log(response.data);
+  const navigate = useNavigate();
+
+  const {
+    mutate: login,
+    isPending,
+    isError,
+  } = useMutation({
+    mutationFn: async (data: LoginFormInputs) => {
+      const response = await axios.post("api/auth/login", {
+        email: data.email,
+        password: data.password,
+        role: data.role,
+      });
+
+      const result = await response.data;
+      console.log(result);
+    },
+    onError: (err) => {
+      if (axios.isAxiosError(err)) {
+        // Handle user exists error based on status code or error message
+        if (err.response?.status === 404) {
+          toast.error(err.response.data.message);
+        } else if (err.response?.status === 401) {
+          toast.error(err.response?.data.message);
+        }
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    },
+    onSuccess: () => {
+      toast.success("Logged in Successfully");
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+
+      navigate("/");
+    },
+  });
+
+  const handleLogin = async (data: LoginFormInputs) => {
+    login(data);
   };
 
   return (
@@ -102,8 +136,9 @@ const Login: React.FC = () => {
             type="submit"
             className="py-2 px-6 border rounded-lg bg-orange-500 text-xl font-medium text-white"
           >
-            Login
+            {isPending ? "Logging in" : "Login"}
           </button>
+          {isError && errors.root?.message}
         </form>
       </div>
     </section>

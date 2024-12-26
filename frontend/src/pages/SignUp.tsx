@@ -1,6 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { z } from "zod";
 
 const signupSchema = z.object({
@@ -31,8 +35,44 @@ const SignUp: React.FC = () => {
     resolver: zodResolver(signupSchema),
   });
 
+  const navigate = useNavigate();
+
+  const {
+    mutate: signup,
+    isPending,
+    isError,
+  } = useMutation({
+    mutationFn: async (data: SignupFormInputs) => {
+      const res = await axios.post("/api/auth/signup", {
+        name: data.name,
+        email: data.email,
+        mobile: data.mobile,
+        password: data.password,
+        role: data.role,
+      });
+      // const result = await res.data;
+      console.log(res.data.message);
+    },
+    onError: (err) => {
+      if (axios.isAxiosError(err)) {
+        // Handle user exists error based on status code or error message
+        if (err.response?.status === 409) {
+          toast.error(err.response.data.message);
+        } else if (err.response?.status === 403) {
+          toast.error(err.response?.data.message);
+        }
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    },
+    onSuccess: () => {
+      toast.success("Signup Completed successfully");
+      navigate("/login");
+    },
+  });
+
   const handleSignup = async (data: SignupFormInputs) => {
-    console.log(data);
+    signup(data);
   };
 
   return (
@@ -85,7 +125,7 @@ const SignUp: React.FC = () => {
                 Mobile
               </label>
               <input
-                type="text"
+                type="tel"
                 id="mobile"
                 placeholder="Enter Mobile no."
                 {...register("mobile")}
@@ -130,15 +170,22 @@ const SignUp: React.FC = () => {
             </div>
           </div>
           {/* Submit Button */}
-          <Link to="/login">
-            <button
-              type="submit"
-              className="py-2 px-6 border rounded-lg bg-orange-500 text-xl font-medium text-white"
-            >
-              Signup
-            </button>
-          </Link>
+
+          <button
+            type="submit"
+            className="py-2 px-6 border rounded-lg bg-orange-500 text-xl font-medium text-white"
+          >
+            {isPending ? "Signing in" : "SignUp"}
+          </button>
+          {isError && <p className="text-red-500">User already exists</p>}
         </form>
+
+        <p className="mt-4 text-sm text-center text-gray-500">
+          already have an account?{" "}
+          <a href="/login" className="underline">
+            login
+          </a>
+        </p>
       </div>
     </section>
   );

@@ -26,9 +26,14 @@ export const signup = async (req: Request, res: Response) => {
     const { name, email, mobile, password, role } = req.body;
 
     const existingUser = await UserModel.findOne({ email });
+    const existingMobile = await UserModel.findOne({ mobile });
 
     if (existingUser) {
-      res.json("user already exists");
+      res.status(409).json({ message: "user already exists" });
+      return;
+    }
+    if (existingMobile) {
+      res.status(403).json({ message: "Mobile already exists" });
       return;
     }
 
@@ -48,7 +53,7 @@ export const signup = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.log("error in signup", error.message);
-    res.status(500).json("internal server error");
+    res.status(500).json({ message: "internal server error" });
     return;
   }
 };

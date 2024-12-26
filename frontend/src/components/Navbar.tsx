@@ -18,10 +18,12 @@ const Navbar = () => {
         if (!data) {
           throw new Error(data.error);
         }
+        return data;
       } catch (error) {
         console.log("error in authUser: ", error);
       }
     },
+    retry: false,
   });
 
   function handleClick() {
@@ -35,11 +37,15 @@ const Navbar = () => {
         Jobs.<span className="text-orange-500">me</span>
       </a>
       <div
-        className={`${
-          authUser
-            ? "hidden md:flex justify-between items-center gap-4"
-            : "hidden"
-        }`}
+        className={`
+          
+          ${
+            authUser
+              ? "hidden md:flex justify-between items-center gap-4"
+              : "hidden"
+          }
+            
+        `}
       >
         <Link to="/" className=" text-gray-500 hover:text-black">
           Home
@@ -51,8 +57,8 @@ const Navbar = () => {
           Jobs
         </Link>
       </div>
-      <div className={`${!authUser ? "flex gap-4 mx-2" : "hidden"}`}>
-        <div className="flex gap-4">
+      <div className="flex gap-4 mx-2">
+        <div className={`${!authUser ? "flex gap-4" : "hidden"}`}>
           <Link
             className="border px-4 py-2 rounded-full border-blue-600 text-blue-600 font-semibold"
             to="/login"
@@ -71,7 +77,7 @@ const Navbar = () => {
           href="/profile"
           className={`${
             authUser
-              ? "flex items-center border px-2 rounded-full shadow-lg"
+              ? "flex items-center border p-2 rounded-full shadow-lg"
               : "hidden"
           }`}
         >

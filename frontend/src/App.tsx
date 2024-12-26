@@ -7,6 +7,7 @@ import JobsPage from "./pages/JobsPage";
 import CompanyPage from "./pages/CompanyPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProfilePage from "./pages/ProfilePage";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/companies" element={<CompanyPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
+          <Toaster />
         </QueryClientProvider>
       </BrowserRouter>
     </div>
