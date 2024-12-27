@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import useProfile from "../hooks/useProfile";
 
 const Hero = () => {
-  const authUser = useProfile();
+  const { authUser } = useProfile();
 
   return (
     <div className="flex flex-col items-center max-w-full bg-gradient-to-b from-orange-50 to-white mx-auto mt-20">

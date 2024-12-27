@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const useProfile = () => {
-  const { data: authUser } = useQuery({
+  const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
       try {
@@ -19,7 +19,7 @@ const useProfile = () => {
     },
     retry: false,
   });
-  return authUser;
+  return { authUser, isLoading };
 };
 
 export default useProfile;

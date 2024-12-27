@@ -9,7 +9,7 @@ import useProfile from "../hooks/useProfile";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
 
-  const authUser = useProfile();
+  const { authUser } = useProfile();
 
   function handleClick() {
     setOpen(!open);

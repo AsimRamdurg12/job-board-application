@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import arrowright from "../assets/arrow-right.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import LoadingSpinner from "../components/Loading";
 
 const CompanyPage = () => {
-  const { data: companies } = useQuery({
+  const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
     queryFn: async () => {
       const res = await axios.get("/api/company/companies");
@@ -15,6 +16,14 @@ const CompanyPage = () => {
       return result;
     },
   });
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="mt-28 h-full mx-4">

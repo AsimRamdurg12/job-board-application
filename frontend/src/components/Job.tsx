@@ -7,10 +7,10 @@ import { Link } from "react-router-dom";
 
 const Job = ({ job }) => {
   return (
-    <div>
+    <div className="mt-3">
       <Link to="/job/:id">
         <div
-          className="my-5 mx-3 sm:mx-2 border shadow-lg rounded-lg"
+          className=" mx-3 h-full sm:mx-2 border shadow-lg rounded-lg"
           key={job._id}
         >
           <div className="flex gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
@@ -34,7 +34,7 @@ const Job = ({ job }) => {
               </div>
               {/* Experience, Salary, Location */}
               <div className="text-gray-500 max-sm:text-sm">
-                <ul className="flex items-center gap-4">
+                <ul className="flex items-center gap-2">
                   <li className="flex items-center gap-2">
                     {" "}
                     <img
@@ -70,7 +70,7 @@ const Job = ({ job }) => {
               {/* skills */}
 
               <div>
-                <ul className="flex gap-2 text-gray-600 max-sm:text-sm">
+                <ul className="flex text-gray-600 max-sm:text-sm flex-wrap">
                   {job.requirements.map(
                     (requirement: string, index: number) => (
                       <li className="flex items-center" key={index}>

@@ -3,16 +3,25 @@ import HomePage from "./pages/HomePage";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import JobsPage from "./pages/JobsPage";
-import CompanyPage from "./pages/CompanyPage";
-
-import ProfilePage from "./pages/ProfilePage";
 import { Toaster } from "react-hot-toast";
 import useProfile from "./hooks/useProfile";
+import LoadingSpinner from "./components/Loading";
 import CompanyById from "./pages/CompanyById";
+import ProfilePage from "./pages/ProfilePage";
+import JobsPage from "./pages/JobsPage";
+import CompanyPage from "./pages/CompanyPage";
+import JobById from "./pages/JobById";
 
 const App = () => {
-  const authUser = useProfile();
+  const { authUser, isLoading } = useProfile();
+
+  if (isLoading) {
+    return (
+      <div className="h-screen w-full flex justify-center items-center">
+        <LoadingSpinner size="xl" />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -34,6 +43,7 @@ const App = () => {
           path="/company/:id"
           element={authUser ? <CompanyById /> : <Login />}
         />
+        <Route path="/job/:id" element={authUser ? <JobById /> : <Login />} />
       </Routes>
       <Toaster />
     </div>

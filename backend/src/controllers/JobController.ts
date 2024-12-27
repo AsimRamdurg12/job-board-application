@@ -32,17 +32,21 @@ export const createJob = async (req: Request, res: Response) => {
       return;
     }
 
-    const job = await JobModel.create({
-      title,
-      description,
-      requirements: requirements.split(","),
-      salary,
-      experienceLevel,
-      location,
-      jobType,
-      position,
-      company: companyId,
-      createdBy: userId,
+    const job = await (
+      await JobModel.create({
+        title,
+        description,
+        requirements: requirements.split(","),
+        salary,
+        experienceLevel,
+        location,
+        jobType,
+        position,
+        company: companyId,
+        createdBy: userId,
+      })
+    ).populate({
+      path: "company",
     });
 
     if (!job) {
