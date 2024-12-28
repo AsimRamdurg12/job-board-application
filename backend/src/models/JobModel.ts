@@ -2,6 +2,7 @@ import mongoose, { model, Schema, Types } from "mongoose";
 
 export interface job {
   title: string;
+  tag: string;
   description: string;
   requirements: string[];
   salary: string;
@@ -17,6 +18,7 @@ export interface job {
 const JobSchema: Schema<job> = new Schema(
   {
     title: { type: String, required: true },
+    tag: { type: String, required: true },
     description: { type: String, required: true },
     requirements: [{ type: String, required: true }],
     salary: { type: String, required: true },

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import arrowright from "../assets/arrow-right.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import LoadingSpinner from "../components/Loading";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const CompanyPage = () => {
   const { data: companies, isLoading } = useQuery({

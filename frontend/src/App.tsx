@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import { Toaster } from "react-hot-toast";
 import useProfile from "./hooks/useProfile";
-import LoadingSpinner from "./components/Loading";
+import LoadingSpinner from "./components/LoadingSpinner";
 import CompanyById from "./pages/CompanyById";
 import ProfilePage from "./pages/ProfilePage";
 import JobsPage from "./pages/JobsPage";
@@ -18,7 +18,7 @@ const App = () => {
   if (isLoading) {
     return (
       <div className="h-screen w-full flex justify-center items-center">
-        <LoadingSpinner size="xl" />
+        <LoadingSpinner />
       </div>
     );
   }

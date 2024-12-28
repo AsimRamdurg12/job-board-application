@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const Job = ({ job }) => {
   return (
     <div className="mt-3">
-      <Link to="/job/:id">
+      <Link to={`/job/${job._id}`}>
         <div
           className=" mx-3 h-full sm:mx-2 border shadow-lg rounded-lg"
           key={job._id}
@@ -82,13 +82,6 @@ const Job = ({ job }) => {
                 </ul>
               </div>
             </div>
-            {/* <div className="">
-              <Link to="/">
-                <button className="w-full px-6 py-2 text-sm bg-blue-600 font-medium text-white rounded-md">
-                  Apply
-                </button>
-              </Link>
-            </div> */}
           </div>
         </div>
       </Link>

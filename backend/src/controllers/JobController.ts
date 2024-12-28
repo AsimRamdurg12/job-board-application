@@ -8,6 +8,7 @@ export const createJob = async (req: Request, res: Response) => {
   try {
     const {
       title,
+      tag,
       description,
       requirements,
       salary,
@@ -35,6 +36,7 @@ export const createJob = async (req: Request, res: Response) => {
     const job = await (
       await JobModel.create({
         title,
+        tag,
         description,
         requirements: requirements.split(","),
         salary,
@@ -65,11 +67,17 @@ export const createJob = async (req: Request, res: Response) => {
 export const getAllJobs = async (req: Request, res: Response) => {
   try {
     const keyword = req.query.keyword || "";
+    const location = req.query.location || "";
 
     const query = {
-      $or: [
-        { title: { $regex: keyword, $options: "i" } },
-        { description: { $regex: keyword, $options: "i" } },
+      $and: [
+        {
+          $or: [
+            { title: { $regex: keyword, $options: "i" } },
+            { description: { $regex: keyword, $options: "i" } },
+          ],
+        },
+        { location: { $regex: location, $options: "i" } },
       ],
     };
 
@@ -120,9 +128,13 @@ export const getJobById = async (req: Request, res: Response) => {
   try {
     const jobId = req.params.id;
 
-    const job = await JobModel.findById(jobId).populate({
-      path: "applications",
-    });
+    const job = await JobModel.findById(jobId)
+      .populate({
+        path: "company",
+      })
+      .populate({
+        path: "applications",
+      });
 
     if (!job) {
       res.status(404).json("no job found");

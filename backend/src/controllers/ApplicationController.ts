@@ -27,7 +27,8 @@ export const applyJobs = async (req: Request, res: Response) => {
     }
 
     if (job.createdBy.toString() === userId) {
-      res.status(403).json();
+      res.status(403).json({ message: "you cannot apply to this job" });
+      return;
     }
 
     const application = await ApplicationsModel.create({

@@ -1,18 +1,33 @@
 import { Link } from "react-router-dom";
 import Bar from "../assets/Bar";
-import { useState } from "react";
-// import { useQuery } from "@tanstack/react-query";
-// import axios from "axios";
-import digitalocean from "../assets/digitalocean.svg";
+import { useEffect, useRef, useState } from "react";
 import useProfile from "../hooks/useProfile";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState(false);
+
+  const menuRef = useRef(null);
 
   const { authUser } = useProfile();
 
-  function handleClick() {
-    setOpen(!open);
+  useEffect(() => {
+    //@ts-expect-error handleClcik
+    function handleClick(e) {
+      //@ts-expect-error e.target
+      if (!menuRef.current?.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClick);
+
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  function handleProfile() {
+    setProfile(!profile);
+    console.log(profile);
   }
 
   return (
@@ -57,25 +72,28 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <a
-          href="/profile"
+        <div
+          onClick={handleProfile}
           className={`${
             authUser
               ? "flex items-center border p-2 rounded-full shadow-lg"
               : "hidden"
           }`}
         >
-          <img src={digitalocean} alt="" className="h-6 w-6" />
-        </a>
+          <img src={authUser.profilePhoto} alt="" className="h-6 w-6" />
+        </div>
 
         <div
-          onClick={handleClick}
+          onClick={() => setOpen(!open)}
           className={`${authUser ? "md:hidden flex items-center" : "hidden"}`}
         >
           <Bar />
         </div>
         {open && (
-          <div className="md:hidden top-16 bg-white absolute border right-1 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg">
+          <div
+            ref={menuRef}
+            className="md:hidden top-16 bg-white absolute border right-1 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg"
+          >
             <a href="/" className="hover:bg-gray-100 p-2">
               Home
             </a>
