@@ -4,13 +4,13 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import { Toaster } from "react-hot-toast";
-import useProfile from "./hooks/useProfile";
 import LoadingSpinner from "./components/LoadingSpinner";
 import CompanyById from "./pages/CompanyById";
 import ProfilePage from "./pages/ProfilePage";
 import JobsPage from "./pages/JobsPage";
 import CompanyPage from "./pages/CompanyPage";
 import JobById from "./pages/JobById";
+import useProfile from "./hooks/useProfile";
 
 const App = () => {
   const { authUser, isLoading } = useProfile();

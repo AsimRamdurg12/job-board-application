@@ -18,6 +18,7 @@ const useProfile = () => {
       }
     },
     retry: false,
+    retryOnMount: false,
   });
   return { authUser, isLoading };
 };
