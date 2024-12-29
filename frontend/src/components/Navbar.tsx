@@ -119,7 +119,7 @@ const Navbar = () => {
           </div>
 
           {profile && (
-            <div className="top-16 bg-white absolute border right-20 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg">
+            <div className="top-16 bg-white absolute border right-20 md:right-12 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg">
               <a href="/profile" className="hover:bg-gray-100 p-2">
                 Profile
               </a>

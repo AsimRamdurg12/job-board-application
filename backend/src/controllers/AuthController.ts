@@ -124,16 +124,8 @@ export const updateProfile = async (req: Request, res: Response) => {
     //@ts-ignore
     const userId = req.id;
 
-    let {
-      name,
-      email,
-      mobile,
-      currentPassword,
-      newPassword,
-      bio,
-      skills,
-      resumeOriginalName,
-    } = req.body;
+    let { name, email, mobile, currentPassword, newPassword, bio, skills } =
+      req.body;
 
     let { resume, profilePhoto } = req.body;
 

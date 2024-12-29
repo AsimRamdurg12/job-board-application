@@ -39,11 +39,12 @@ const App = () => {
           path="/profile"
           element={authUser ? <ProfilePage /> : <Login />}
         />
+
+        <Route path="/job/:id" element={authUser ? <JobById /> : <Login />} />
         <Route
           path="/company/:id"
           element={authUser ? <CompanyById /> : <Login />}
         />
-        <Route path="/job/:id" element={authUser ? <JobById /> : <Login />} />
       </Routes>
       <Toaster />
     </div>

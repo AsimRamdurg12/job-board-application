@@ -5,6 +5,7 @@ import document from "../assets/document.svg";
 import dot from "../assets/dot.svg";
 import { Link } from "react-router-dom";
 
+//@ts-expect-error job
 const Job = ({ job }) => {
   return (
     <div className="mt-3">

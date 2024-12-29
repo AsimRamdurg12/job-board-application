@@ -6,13 +6,13 @@ import axios from "axios";
 import dot from "../assets/dot.svg";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
+import useProfile from "../hooks/useProfile";
 
 const JobById = () => {
   const params = useParams();
 
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const { authUser } = useProfile();
 
-  //@ts-expect-error authUser._id is the logged in user's id;
   const userId = authUser._id;
 
   const { data: jobbyid, isLoading } = useQuery({

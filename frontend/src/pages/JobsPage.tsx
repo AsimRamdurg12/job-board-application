@@ -54,7 +54,8 @@ const JobsPage = () => {
         {/* Job To Apply */}
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {getJobs?.length !== 0
-            ? getJobs?.map((job) => <Job key={job._id} job={job} />)
+            ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              getJobs?.map((job: any) => <Job key={job._id} job={job} />)
             : "No Jobs yet"}
         </div>
       </div>
