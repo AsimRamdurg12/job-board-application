@@ -1,20 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Bar from "../assets/Bar";
 import { useEffect, useRef, useState } from "react";
 import logoutimg from "../assets/logout.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import toast from "react-hot-toast";
 import useProfile from "../hooks/useProfile";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState(false);
 
+  const navigate = useNavigate();
+
   const openRef = useRef(null);
   const profileRef = useRef(null);
-
-  const { authUser } = useProfile();
 
   const queryClient = useQueryClient();
 
@@ -38,9 +37,11 @@ const Navbar = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      toast.success("Logged out successfully");
+      window.location.reload();
     },
   });
+
+  const { authUser } = useProfile();
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -126,6 +127,7 @@ const Navbar = () => {
               <button
                 onClick={() => {
                   logout();
+                  navigate("/");
                 }}
                 className="hover:bg-gray-100 p-2 flex gap-2 items-center"
               >
@@ -147,7 +149,14 @@ const Navbar = () => {
               <a href="/" className="hover:bg-gray-100 p-2">
                 Home
               </a>
-              <a href="/companies" className="hover:bg-gray-100 p-2">
+              <a
+                href={
+                  authUser.role === "recruiter"
+                    ? "/admin/companies"
+                    : "/companies"
+                }
+                className="hover:bg-gray-100 p-2"
+              >
                 Companies
               </a>
               <a href="/jobs" className="hover:bg-gray-100 p-2">

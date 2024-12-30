@@ -105,11 +105,24 @@ export const getMyJobs = async (req: Request, res: Response) => {
     //@ts-ignore
     const userId = req.id;
 
+    const keyword = req.query.keyword || "";
+    const location = req.query.location || "";
+
+    const query = {
+      $and: [
+        {
+          $or: [
+            { title: { $regex: keyword, $options: "i" } },
+            { description: { $regex: keyword, $options: "i" } },
+          ],
+        },
+        { location: { $regex: location, $options: "i" } },
+      ],
+    };
+
     const user = await UserModel.findById(userId);
 
-    const myJobs = await JobModel.find({
-      createdBy: user?._id,
-    });
+    const myJobs = await JobModel.find({ createdBy: user?._id });
 
     if (!myJobs) {
       res.status(404).json("no jobs found");

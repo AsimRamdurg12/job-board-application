@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import Job from "../components/Job";
+import Job from "../../components/Job";
 import { useRef, useState } from "react";
 
 const JobsPage = () => {

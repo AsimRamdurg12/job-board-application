@@ -71,6 +71,7 @@ export const login = async (req: Request, res: Response) => {
 
     if (role !== existingUser?.role) {
       res.status(401).json("Role does not match");
+      return;
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -80,6 +81,7 @@ export const login = async (req: Request, res: Response) => {
 
     if (!passwordMatch) {
       res.status(401).json("Invalid Password");
+      return;
     } else {
       const token = jwt.sign(
         {

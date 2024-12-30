@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 
 //@ts-expect-error job
 const Job = ({ job }) => {
+  console.log(job);
+
   return (
     <div className="mt-3">
       <Link to={`/job/${job._id}`}>
@@ -65,7 +67,7 @@ const Job = ({ job }) => {
                   alt="job description"
                   className="w-4 h-5 sm:w-3.5 sm:h-4"
                 />
-                <p>{job.description}</p>
+                <p>{job.tag}</p>
               </div>
 
               {/* skills */}

@@ -49,9 +49,9 @@ const Login: React.FC = () => {
       if (axios.isAxiosError(err)) {
         // Handle user exists error based on status code or error message
         if (err.response?.status === 404) {
-          toast.error(err.response.data.message);
+          toast.error("user not found");
         } else if (err.response?.status === 401) {
-          toast.error(err.response?.data.message);
+          toast.error("Invalid Credentials");
         }
       } else {
         toast.error("An unexpected error occurred.");
@@ -138,7 +138,9 @@ const Login: React.FC = () => {
           >
             {isPending ? "Logging in" : "Login"}
           </button>
-          {isError && errors.root?.message}
+          <p className="text-red-500">
+            {isError && "Please Check the credentials"}
+          </p>
         </form>
       </div>
     </section>

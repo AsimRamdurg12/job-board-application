@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import arrowright from "../assets/arrow-right.svg";
+import arrowright from "../../assets/arrow-right.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
-const CompanyPage = () => {
+const AdminCompanies = () => {
   const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
     queryFn: async () => {
-      const res = await axios.get("/api/company/companies");
+      const res = await axios.get("/api/company/mycompanies");
       const result = await res.data;
 
       console.log(result);
@@ -41,7 +41,7 @@ const CompanyPage = () => {
                 job: string;
                 tagline: string;
               }) => (
-                <Link to={`/company/${company._id}`}>
+                <Link to={`/admin/company/${company._id}`}>
                   <div
                     className="flex gap-4 h-full border my-2 space mx-4 py-4 px-4 rounded-lg"
                     key={company._id}
@@ -82,4 +82,4 @@ const CompanyPage = () => {
   );
 };
 
-export default CompanyPage;
+export default AdminCompanies;

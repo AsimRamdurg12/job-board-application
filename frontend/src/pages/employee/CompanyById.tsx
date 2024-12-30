@@ -1,8 +1,8 @@
 import { Link, useParams } from "react-router-dom";
-import microsoft from "../assets/microsoft.svg";
+import microsoft from "../../assets/microsoft.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import dot from "../assets/dot.svg";
+import dot from "../../assets/dot.svg";
 import { Key } from "react";
 
 const CompanyById = () => {
@@ -142,7 +142,7 @@ const CompanyById = () => {
 
                       <div>
                         <ul className="flex gap-2 text-gray-600 max-sm:text-sm flex-wrap">
-                          {companyJob.requirements?.map((skill) => (
+                          {companyJob.requirements?.map((skill: string) => (
                             <li className="flex items-center">
                               <img src={dot} alt="" className="w-6 h-6" />
                               {skill}

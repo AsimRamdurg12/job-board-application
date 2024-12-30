@@ -4,9 +4,28 @@ import skills from "../assets/skills.svg";
 import useProfile from "../hooks/useProfile";
 import dot from "../assets/dot.svg";
 import menu from "../assets/menu.svg";
+import { useEffect, useRef, useState } from "react";
 
 const ProfilePage = () => {
+  const [open, setOpen] = useState(false);
+  const openRef = useRef(null);
+
   const { authUser } = useProfile();
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      //@ts-expect-error e.target
+      if (!openRef.current?.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, []);
 
   console.log(authUser.role);
 
@@ -19,8 +38,19 @@ const ProfilePage = () => {
             alt=""
             className="h-20 w-20 rounded-full absolute"
           />
-          <div className="absolute right-0">
-            <img src={menu} alt="" className="w-6 h-6" />
+
+          <div className="absolute right-0" ref={openRef}>
+            <img
+              src={menu}
+              alt=""
+              className="w-6 h-6 cursor-pointer"
+              onClick={() => setOpen(!open)}
+            />
+            {open && (
+              <div className="bg-white absolute border hover:bg-gray-100 right-1 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg">
+                <a href="/profile/update">Update</a>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col items-center">

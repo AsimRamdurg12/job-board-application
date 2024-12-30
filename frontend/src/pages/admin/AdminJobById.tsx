@@ -1,14 +1,13 @@
 import { Link, useParams } from "react-router-dom";
-import microsoft from "../assets/microsoft.svg";
-// import toast from "react-hot-toast";
+import microsoft from "../../assets/microsoft.svg";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import dot from "../assets/dot.svg";
+import dot from "../../assets/dot.svg";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../components/LoadingSpinner";
-import useProfile from "../hooks/useProfile";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import useProfile from "../../hooks/useProfile";
 
-const JobById = () => {
+const AdminJobById = () => {
   const params = useParams();
 
   const { authUser } = useProfile();
@@ -20,6 +19,8 @@ const JobById = () => {
     queryFn: async () => {
       const response = await axios.get(`/api/job/${params.id}`);
       const result = await response.data;
+
+      console.log(result);
 
       if (!result || !response) {
         console.log(result.error);
@@ -50,10 +51,7 @@ const JobById = () => {
     },
     onSuccess: () => {
       toast.success("applied successfully");
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-        queryClient.invalidateQueries({ queryKey: ["jobbyid"] }),
-      ]);
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: (error) => {
       console.log(error);
@@ -116,14 +114,14 @@ const JobById = () => {
                   </ul>
                 </div>
 
-                {/* Job Description */}
+                {/* Job Tag */}
                 <div className="flex max-sm:text-sm items-center gap-2 text-gray-800">
                   <img
                     src={microsoft}
                     alt="job description"
                     className="w-4 h-5 sm:w-3.5 sm:h-4"
                   />
-                  <p>{jobbyid?.description}</p>
+                  <p>{jobbyid.tag}</p>
                 </div>
 
                 {/* skills */}
@@ -140,6 +138,15 @@ const JobById = () => {
                     )}
                   </ul>
                 </div>
+                <a
+                  href={`/admin/job/${jobbyid._id}/applicants`}
+                  className="underline hover:text-black text-gray-600"
+                >
+                  {jobbyid.applications.length}{" "}
+                  {jobbyid.applications.length === 1
+                    ? "Applicant"
+                    : "Applicants"}
+                </a>
               </div>
             </div>
             <div className="">
@@ -155,7 +162,9 @@ const JobById = () => {
                     : "bg-blue-600"
                 }
                 `}
-                onClick={() => applyJob(jobbyid._id)}
+                onClick={() => {
+                  applyJob(jobbyid._id);
+                }}
               >
                 {isPending && isError && "Apply"}
                 {!isPending && !isError && "Applied"}
@@ -247,4 +256,4 @@ const JobById = () => {
   );
 };
 
-export default JobById;
+export default AdminJobById;
