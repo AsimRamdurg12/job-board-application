@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { UserModel } from "../models/UserModel";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
+import getDataUri from "../utils/datauri";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
 
@@ -126,10 +127,19 @@ export const updateProfile = async (req: Request, res: Response) => {
     //@ts-ignore
     const userId = req.id;
 
-    let { name, email, mobile, currentPassword, newPassword, bio, skills } =
-      req.body;
+    let {
+      name,
+      email,
+      mobile,
+      currentPassword,
+      newPassword,
+      bio,
+      skills,
+      profilePhoto,
+    } = req.body;
 
-    let { resume, profilePhoto } = req.body;
+    let resume = req.file as Express.Multer.File;
+    const fileUri = getDataUri(resume);
 
     const user = await UserModel.findById(userId);
 
@@ -186,9 +196,11 @@ export const updateProfile = async (req: Request, res: Response) => {
       if (user.profile?.resume) {
         await cloudinary.uploader.destroy(user.profile.resume);
       }
-      const cloudResponse = await cloudinary.uploader.upload(resume);
-      resume = cloudResponse.secure_url;
-      user.profile.resume = resume;
+      const cloudResponse = await cloudinary.uploader.upload(
+        fileUri.content as string
+      );
+      user.profile.resume = cloudResponse.secure_url;
+      user.profile.resumeOriginalName = resume.originalname;
     }
 
     if (name) user.name = name;

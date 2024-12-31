@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useProfile from "../hooks/useProfile";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState(false);
 

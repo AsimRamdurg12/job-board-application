@@ -6,7 +6,7 @@ import dot from "../assets/dot.svg";
 import menu from "../assets/menu.svg";
 import { useEffect, useRef, useState } from "react";
 
-const ProfilePage = () => {
+const ProfilePage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const openRef = useRef(null);
 

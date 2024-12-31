@@ -10,6 +10,7 @@ export interface user {
     bio: string;
     skills: string[];
     resume: string;
+    resumeOriginalName: string;
     company: Types.ObjectId;
     profilePhoto: string;
   };
@@ -26,6 +27,7 @@ const UserSchema: Schema<user> = new Schema(
       bio: { type: String },
       skills: [{ type: String }],
       resume: { type: String },
+      resumeOriginalName: { type: String },
       company: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
       profilePhoto: {
         type: String,
