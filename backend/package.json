@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tanstack/match-sorter-utils": "^8.19.4",
+    "@tanstack/react-table": "^8.20.6",
     "@types/multer": "^1.4.12",
     "@types/nodemon": "^1.19.6",
     "bcryptjs": "^2.4.3",

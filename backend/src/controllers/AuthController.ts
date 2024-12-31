@@ -138,15 +138,16 @@ export const updateProfile = async (req: Request, res: Response) => {
       profilePhoto,
     } = req.body;
 
-    let resume = req.file as Express.Multer.File;
-    const fileUri = getDataUri(resume);
-
     const user = await UserModel.findById(userId);
 
     if (!user) {
       res.status(403).json("User not found");
       return;
     }
+
+    let resume = req.file as Express.Multer.File;
+
+    const fileUri = getDataUri(resume);
 
     if (
       (!newPassword && currentPassword) ||
@@ -197,7 +198,10 @@ export const updateProfile = async (req: Request, res: Response) => {
         await cloudinary.uploader.destroy(user.profile.resume);
       }
       const cloudResponse = await cloudinary.uploader.upload(
-        fileUri.content as string
+        fileUri.content as string,
+        {
+          resource_type: "raw",
+        }
       );
       user.profile.resume = cloudResponse.secure_url;
       user.profile.resumeOriginalName = resume.originalname;
@@ -214,7 +218,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     const updatedUser = await user.save();
 
     if (updatedUser) {
-      res.status(200).json({ updatedUser });
+      res.status(200).json(updatedUser);
       return;
     }
   } catch (error: any) {

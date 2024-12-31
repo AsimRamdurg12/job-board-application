@@ -50,8 +50,8 @@ const SignUp: React.FC = () => {
         password: data.password,
         role: data.role,
       });
-      // const result = await res.data;
-      console.log(res.data.message);
+      const result = await res.data;
+      return result;
     },
     onError: (err) => {
       if (axios.isAxiosError(err)) {

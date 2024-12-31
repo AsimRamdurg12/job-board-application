@@ -6,9 +6,11 @@ import dot from "../../assets/dot.svg";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import useProfile from "../../hooks/useProfile";
+import { useState } from "react";
 
 const JobById = () => {
   const params = useParams();
+  const [applicants, setApplicants] = useState<any[]>([]);
 
   const { authUser } = useProfile();
 
@@ -20,7 +22,9 @@ const JobById = () => {
       const response = await axios.get(`/api/job/${params.id}`);
       const result = await response.data;
 
-      console.log(result);
+      if (Array.isArray(result.applications)) {
+        setApplicants(result.applications.map((app) => app.applicant));
+      }
 
       if (!result || !response) {
         console.log(result.error);
@@ -29,11 +33,12 @@ const JobById = () => {
     },
   });
 
+  const hasApplied = applicants.some((applicant) => applicant === userId);
+
   const queryClient = useQueryClient();
 
   const {
     mutate: applyJob,
-    isPending,
     isError,
     error,
   } = useMutation({
@@ -51,7 +56,10 @@ const JobById = () => {
     },
     onSuccess: () => {
       toast.success("applied successfully");
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+        queryClient.invalidateQueries({ queryKey: ["jobbyid"] }),
+      ]);
     },
     onError: (error) => {
       console.log(error);
@@ -142,23 +150,21 @@ const JobById = () => {
             </div>
             <div className="">
               <button
-                disabled={!isPending && !isError ? true : false}
+                disabled={hasApplied ? true : false}
                 className={`${
-                  userId == jobbyid?.createdBy
+                  userId == jobbyid?.createdBy || authUser.role === "recruiter"
                     ? "hidden"
                     : "w-full px-6 py-2 text-sm font-medium text-white rounded-md"
                 } ${
-                  !isPending && !isError
-                    ? "bg-green-600 cursor-not-allowed"
-                    : "bg-blue-600"
+                  hasApplied ? "bg-green-600 cursor-not-allowed" : "bg-blue-600"
                 }
                 `}
                 onClick={() => {
                   applyJob(jobbyid._id);
                 }}
               >
-                {isPending && isError && "Apply"}
-                {!isPending && !isError && "Applied"}
+                {!hasApplied && "Apply"}
+                {hasApplied && "Applied"}
               </button>
             </div>
           </div>

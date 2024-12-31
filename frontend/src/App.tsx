@@ -110,7 +110,7 @@ const App = () => {
         />
 
         <Route
-          path="/admin/job/:id/applicants"
+          path="/admin/applicants/job/:id"
           element={
             authUser ? (
               <ProtectedRoute>

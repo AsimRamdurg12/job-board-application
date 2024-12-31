@@ -16,10 +16,12 @@ interface UpdateProps {
   currentPassword?: string;
   newPassword?: string;
   resume?: File;
+  resumeOriginalName?: string;
 }
 
 const UpdateProfile: React.FC = () => {
   const { authUser } = useProfile();
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
 
   const { register, handleSubmit } = useForm<UpdateProps>({
     defaultValues: {
@@ -30,6 +32,8 @@ const UpdateProfile: React.FC = () => {
       skills: authUser.profile.skills?.join(", "),
       currentPassword: "",
       newPassword: "",
+      resume: authUser.profile.resume,
+      resumeOriginalName: authUser.profile.resumeOriginalName,
     },
   });
 
@@ -51,17 +55,16 @@ const UpdateProfile: React.FC = () => {
       formData.append("skills", updatedData.skills || "");
       formData.append("currentPassword", updatedData.currentPassword || "");
       formData.append("newPassword", updatedData.newPassword || "");
-
       // Append file if present
-      if (updatedData.resume) {
-        formData.append("resume", updatedData.resume);
+      if (resumeFile) {
+        formData.append("resume", resumeFile || null);
+        formData.append("resumeOriginalName", resumeFile?.name);
       }
 
       const res = await axios.post("/api/auth/update", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        withCredentials: true,
       });
 
       return res.data;
@@ -77,7 +80,6 @@ const UpdateProfile: React.FC = () => {
   });
 
   const handleUpdate = (updatedData: UpdateProps) => {
-    console.log("Submitting form data:", updatedData);
     update(updatedData);
   };
 
@@ -87,7 +89,10 @@ const UpdateProfile: React.FC = () => {
         <div className="text-center my-5 text-xl font-bold">
           Update <span className="text-blue-600">Profile</span>
         </div>
-        <form onSubmit={handleSubmit(handleUpdate)}>
+        <form
+          onSubmit={handleSubmit(handleUpdate)}
+          encType="multipart/form-data"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4 place-items-center">
             <div className="flex flex-col">
               <label htmlFor="name" className="font-semibold">
@@ -149,9 +154,15 @@ const UpdateProfile: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
-                Resume
+                Resume{" "}
+                <span className="text-xs text-gray-600">
+                  (upload .pdf file)
+                </span>
               </label>
-              <input type="file" {...register("resume")} />
+              <input
+                type="file"
+                onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
+              />
             </div>
             <div className="flex flex-col">
               <label htmlFor="CurrentPassword" className="font-semibold">

@@ -36,15 +36,9 @@ const JobsPage = () => {
             ref={inputRef}
             // value={input}
             name="input"
+            placeholder="Search"
             onChange={handleInput}
           />
-
-          <button
-            onClick={handleInput}
-            className="border px-4 py-1 rounded-full bg-blue-600 text-white text-xl font-medium"
-          >
-            Search
-          </button>
         </div>
       </div>
 

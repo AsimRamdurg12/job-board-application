@@ -25,8 +25,6 @@ const CompanyById = () => {
       const res = await axios.get(`/api/company/${params.id}/jobs`);
       const result = res.data;
 
-      console.log(result.length);
-
       if (!result) {
         console.log(result.error);
       }

@@ -27,8 +27,6 @@ const ProfilePage: React.FC = () => {
     };
   }, []);
 
-  console.log(authUser.role);
-
   return (
     <div className="mt-36 mb-36 sm:mb-0 flex justify-center">
       <div className="h-full px-4 border max-w-3xl md:mx-auto w-full rounded-xl shadow-lg mx-4 pb-4 flex flex-col items-center gap-4">
@@ -80,17 +78,21 @@ const ProfilePage: React.FC = () => {
         <div className="flex flex-wrap justify-center items-center text-gray-700">
           <img src={skills} alt="skills" className="h-4 w-4" />
 
-          {authUser.profile.skills.map((skill: string) => (
-            <div className="flex items-center">
+          {authUser.profile.skills.map((skill: string, index: number) => (
+            <div className="flex items-center" key={index}>
               <img src={dot} alt="dot" className="h-4 w-4" />
               <p>{skill}</p>
             </div>
           ))}
         </div>
 
-        <div>
-          <input type="file" name="resume" id="resume" />
-        </div>
+        <a
+          href={authUser.profile.resume}
+          target="_blank"
+          download={authUser.profile.resume}
+        >
+          {authUser.profile.resumeOriginalName}
+        </a>
       </div>
     </div>
   );

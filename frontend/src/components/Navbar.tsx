@@ -5,6 +5,7 @@ import logoutimg from "../assets/logout.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useProfile from "../hooks/useProfile";
+import toast from "react-hot-toast";
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -23,8 +24,6 @@ const Navbar: React.FC = () => {
         const res = await axios.post("/api/auth/logout");
         const result = res.data;
 
-        console.log(result);
-
         if (!result) {
           console.log(result.error);
 
@@ -37,7 +36,8 @@ const Navbar: React.FC = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      window.location.reload();
+      navigate("/");
+      toast.success("logged out successfully");
     },
   });
 
@@ -127,7 +127,6 @@ const Navbar: React.FC = () => {
               <button
                 onClick={() => {
                   logout();
-                  navigate("/");
                 }}
                 className="hover:bg-gray-100 p-2 flex gap-2 items-center"
               >

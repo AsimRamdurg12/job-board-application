@@ -43,7 +43,7 @@ const Login: React.FC = () => {
       });
 
       const result = await response.data;
-      console.log(result);
+      return result;
     },
     onError: (err) => {
       if (axios.isAxiosError(err)) {
