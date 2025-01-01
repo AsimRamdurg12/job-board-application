@@ -1,8 +1,68 @@
-import { FormEvent } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
+interface CompanyProps {
+  name?: string;
+  tagline?: string;
+  description?: string;
+  website: string;
+  location?: string;
+}
 
 const CreateCompany = () => {
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const [logo, setLogo] = useState<File | null>(null); // Store the file directly
+
+  const { register, handleSubmit } = useForm<CompanyProps>({
+    defaultValues: {
+      name: "",
+      tagline: "",
+      description: "",
+      website: "",
+      location: "",
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: createCompany,
+    isPending,
+    isError,
+  } = useMutation({
+    mutationFn: async (data: CompanyProps) => {
+      const formData = new FormData();
+
+      formData.append("name", data.name || "");
+      formData.append("tagline", data.tagline || "");
+      formData.append("description", data.description || "");
+      formData.append("website", data.website || "");
+      formData.append("location", data.location || "");
+      if (logo) {
+        formData.append("logo", logo); // Directly append the File object
+      }
+
+      const res = await axios.post("/api/company/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return res.data; // Assuming API response has data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
+      toast.success("Company created successfully!");
+    },
+    onError: () => {
+      toast.error("Failed to create company.");
+    },
+  });
+
+  const handleFormSubmit = (data: CompanyProps) => {
+    createCompany(data);
   };
 
   return (
@@ -11,7 +71,11 @@ const CreateCompany = () => {
         <div className="text-center my-5 text-xl font-bold">
           Create <span className="text-blue-600">Company</span>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit(handleFormSubmit)}
+          encType="multipart/form-data"
+          className="place-items-center"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4 place-items-center">
             <div className="flex flex-col">
               <label htmlFor="name" className="font-semibold">
@@ -19,8 +83,9 @@ const CreateCompany = () => {
               </label>
               <input
                 type="text"
-                placeholder="enter company name"
+                placeholder="Enter company name"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
+                {...register("name")}
               />
             </div>
             <div className="flex flex-col">
@@ -29,8 +94,9 @@ const CreateCompany = () => {
               </label>
               <input
                 type="text"
-                placeholder="enter tagline"
+                placeholder="Enter tagline"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
+                {...register("tagline")}
               />
             </div>
             <div className="flex flex-col">
@@ -39,8 +105,9 @@ const CreateCompany = () => {
               </label>
               <input
                 type="text"
-                placeholder="enter description"
+                placeholder="Enter description"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
+                {...register("description")}
               />
             </div>
             <div className="flex flex-col">
@@ -49,27 +116,30 @@ const CreateCompany = () => {
               </label>
               <input
                 type="text"
-                placeholder="enter company website"
+                placeholder="Enter company website"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
+                {...register("website")}
               />
             </div>
             <div className="flex flex-col">
               <label htmlFor="logo" className="font-semibold">
-                logo
+                Logo
               </label>
               <input
                 type="file"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
+                onChange={(e) => setLogo(e.target.files?.[0] || null)} // Set File or null
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="logo" className="font-semibold">
+              <label htmlFor="location" className="font-semibold">
                 Location
               </label>
               <input
                 type="text"
-                placeholder="enter company location"
+                placeholder="Enter company location"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
+                {...register("location")}
               />
             </div>
           </div>
@@ -77,9 +147,9 @@ const CreateCompany = () => {
             type="submit"
             className="border px-4 py-2 bg-blue-600 text-white text-lg font-medium rounded-md"
           >
-            Create
+            {isPending ? "Creating..." : "Create"}
           </button>
-          <p className="text-red-500"></p>
+          {isError && <p className="text-red-500"></p>}
         </form>
       </div>
     </div>

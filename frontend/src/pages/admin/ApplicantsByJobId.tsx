@@ -1,13 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Key } from "react";
+import { Key, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import menu from "../../assets/menu.svg";
 
 const ApplicantsByJobId = () => {
   const params = useParams();
 
-  const applicationStatus = ["rejected", "accepted"];
+  const [open, setOpen] = useState(false);
+
+  const openRef = useRef(null);
+
+  const applicationStatus = ["pending", "rejected", "accepted"];
 
   const { data: applicants } = useQuery({
     queryKey: ["applicants"],
@@ -20,15 +25,29 @@ const ApplicantsByJobId = () => {
     },
   });
 
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      //@ts-expect-error e.target
+      if (!openRef.current?.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClick);
+
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
   const statusHandler = async (status: string, id: Key) => {
     console.log("called");
 
     axios.defaults.withCredentials = true;
     const res = await axios.post(`/api/apply/status/${id}`, { status });
     console.log(res);
-    if (res.data.success) {
-      toast.success(res.data.message);
+    if (res.data.application.status) {
+      toast.success(`application ${res.data.application.status}`);
     }
+    window.location.reload();
   };
 
   return (
@@ -68,20 +87,32 @@ const ApplicantsByJobId = () => {
                       "No Resume"
                     )}
                   </td>
-                  <td className="text-center">
-                    {applicationStatus.map((status, index) => {
-                      return (
-                        <div
-                          onClick={() =>
-                            statusHandler(status, application?._id)
-                          }
-                          key={index}
-                          className="flex items-center my-2 cursor-pointer"
-                        >
-                          <span>{status}</span>
-                        </div>
-                      );
-                    })}
+                  <td
+                    className="place-items-center"
+                    onClick={() => setOpen(!open)}
+                    ref={openRef}
+                  >
+                    <div className="flex justify-center items-center">
+                      <p>{application.status}</p>
+                      <img src={menu} alt="" className="w-5 h-5" />
+                    </div>
+                    {open && (
+                      <div className="mt-5 absolute border right-20 md:right-12 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg">
+                        {applicationStatus.map((status, index) => {
+                          return (
+                            <div
+                              onClick={() =>
+                                statusHandler(status, application?._id)
+                              }
+                              key={index}
+                              className="flex items-center my-2 cursor-pointer"
+                            >
+                              <span>{status}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))

@@ -32,8 +32,8 @@ const UpdateProfile: React.FC = () => {
       skills: authUser.profile.skills?.join(", "),
       currentPassword: "",
       newPassword: "",
-      resume: authUser.profile.resume,
-      resumeOriginalName: authUser.profile.resumeOriginalName,
+      resume: undefined,
+      resumeOriginalName: authUser.profile.resumeOriginalName || "",
     },
   });
 
@@ -57,7 +57,7 @@ const UpdateProfile: React.FC = () => {
       formData.append("newPassword", updatedData.newPassword || "");
       // Append file if present
       if (resumeFile) {
-        formData.append("resume", resumeFile || null);
+        formData.append("resume", resumeFile);
         formData.append("resumeOriginalName", resumeFile?.name);
       }
 

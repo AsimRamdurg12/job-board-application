@@ -15,6 +15,6 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", Protect, logout);
 router.get("/get", Protect, getProfile);
-router.post("/update", Protect, upload, updateProfile);
+router.post("/update", Protect, upload.single("resume"), updateProfile);
 
 export default router;

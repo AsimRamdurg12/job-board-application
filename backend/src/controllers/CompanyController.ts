@@ -3,12 +3,12 @@ import { CompanyModel } from "../models/CompanyModel";
 import { UserModel } from "../models/UserModel";
 import { JobModel } from "../models/JobModel";
 import { v2 as cloudinary } from "cloudinary";
+import getDataUri from "../utils/datauri";
 
 export const registerCompany = async (req: Request, res: Response) => {
   try {
     const { name, tagline, description, website, location } = req.body;
 
-    let { logo } = req.body;
     //@ts-ignore
     const userId = req.id;
 
@@ -26,15 +26,29 @@ export const registerCompany = async (req: Request, res: Response) => {
       return;
     }
 
-    const cloudResponse = await cloudinary.uploader.upload(logo);
-    logo = cloudResponse.secure_url;
+    let logo = (req.file as Express.Multer.File) ? req.file : null;
+
+    let fileUri;
+
+    if ((logo = req.file as Express.Multer.File)) {
+      fileUri = getDataUri(logo);
+    }
+
+    let logoUrl;
+
+    if (logo) {
+      const cloudResponse = await cloudinary.uploader.upload(
+        fileUri?.content as string
+      );
+      logoUrl = cloudResponse.secure_url;
+    }
 
     const register = await CompanyModel.create({
       name: name,
       tagline: tagline,
       description: description,
       website: website,
-      logo: logo,
+      logo: logoUrl,
       location: location,
       userId: userId,
     });
@@ -43,8 +57,8 @@ export const registerCompany = async (req: Request, res: Response) => {
       message: "Company registered successfully",
       register,
     });
-  } catch (error: any) {
-    console.log("error in registerCompany", error.message);
+  } catch (error) {
+    console.log("error in registerCompany", error);
     res.status(500).json("internal server error");
     return;
   }
