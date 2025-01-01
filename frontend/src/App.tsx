@@ -18,6 +18,8 @@ import ProtectedRoute from "./pages/admin/ProtectedRoute";
 import AdminCompanyById from "./pages/admin/AdminCompanyById";
 import AdminJobById from "./pages/admin/AdminJobById";
 import ApplicantsByJobId from "./pages/admin/ApplicantsByJobId";
+import CreateCompany from "./pages/admin/CreateCompany";
+import CreateJob from "./pages/admin/CreateJob";
 
 const App = () => {
   const { authUser, isLoading } = useProfile();
@@ -97,11 +99,37 @@ const App = () => {
         />
 
         <Route
+          path="/admin/job/create"
+          element={
+            authUser ? (
+              <ProtectedRoute>
+                <CreateJob />
+              </ProtectedRoute>
+            ) : (
+              <HomePage />
+            )
+          }
+        />
+
+        <Route
           path="/admin/company/:id"
           element={
             authUser ? (
               <ProtectedRoute>
                 <AdminCompanyById />
+              </ProtectedRoute>
+            ) : (
+              <HomePage />
+            )
+          }
+        />
+
+        <Route
+          path="/admin/company/create"
+          element={
+            authUser ? (
+              <ProtectedRoute>
+                <CreateCompany />
               </ProtectedRoute>
             ) : (
               <HomePage />

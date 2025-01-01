@@ -1,18 +1,15 @@
 import { Link, useParams } from "react-router-dom";
-import microsoft from "../../assets/microsoft.svg";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import experience from "../../assets/experience.svg";
+import rupee from "../../assets/rupee.svg";
+import location from "../../assets/location.svg";
+import description from "../../assets/document.svg";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import dot from "../../assets/dot.svg";
-import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import useProfile from "../../hooks/useProfile";
 
 const AdminJobById = () => {
   const params = useParams();
-
-  const { authUser } = useProfile();
-
-  const userId = authUser._id;
 
   const { data: jobbyid, isLoading } = useQuery({
     queryKey: ["jobbyid"],
@@ -20,42 +17,10 @@ const AdminJobById = () => {
       const response = await axios.get(`/api/job/${params.id}`);
       const result = await response.data;
 
-      console.log(result);
-
       if (!result || !response) {
         console.log(result.error);
       }
       return result;
-    },
-  });
-
-  const queryClient = useQueryClient();
-
-  const {
-    mutate: applyJob,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
-    mutationFn: async () => {
-      try {
-        const res = await axios.post(`/api/apply/${params.id}`);
-        const result = await res.data;
-
-        if (!result || !res) {
-          console.log(result.error);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    onSuccess: () => {
-      toast.success("applied successfully");
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-    onError: (error) => {
-      console.log(error);
-      toast.error("cannot apply");
     },
   });
 
@@ -74,8 +39,12 @@ const AdminJobById = () => {
           <div className="flex justify-between gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
             <div className="flex gap-4">
               <div className="w-20 h-20 flex justify-center items-center">
-                <Link to="/company/:id">
-                  <img src={jobbyid?.company.logo} alt="" className="w-6 h-6" />
+                <Link to={`/admin/company/${jobbyid.company._id}`}>
+                  <img
+                    src={jobbyid?.company.logo}
+                    alt=""
+                    className="w-14 h-14 rounded-lg"
+                  />
                 </Link>
               </div>
               <div className="flex flex-col gap-2">
@@ -95,7 +64,7 @@ const AdminJobById = () => {
                     <li className="flex items-center gap-2">
                       {" "}
                       <img
-                        src={microsoft}
+                        src={experience}
                         alt="experience"
                         className="w-3 h-3"
                       />{" "}
@@ -103,12 +72,12 @@ const AdminJobById = () => {
                     </li>{" "}
                     |
                     <li className="flex items-center gap-2">
-                      <img src={microsoft} alt="rupees" className="w-3 h-3" />{" "}
+                      <img src={rupee} alt="rupees" className="w-3 h-3" />{" "}
                       {jobbyid?.salary}
                     </li>{" "}
                     |
                     <li className="flex items-center gap-2">
-                      <img src={microsoft} alt="location" className="w-4 h-4" />
+                      <img src={location} alt="location" className="w-4 h-4" />
                       {jobbyid?.location}
                     </li>
                   </ul>
@@ -117,7 +86,7 @@ const AdminJobById = () => {
                 {/* Job Tag */}
                 <div className="flex max-sm:text-sm items-center gap-2 text-gray-800">
                   <img
-                    src={microsoft}
+                    src={description}
                     alt="job description"
                     className="w-4 h-5 sm:w-3.5 sm:h-4"
                   />
@@ -149,30 +118,8 @@ const AdminJobById = () => {
                 </a>
               </div>
             </div>
-            <div className="">
-              <button
-                disabled={!isPending && !isError ? true : false}
-                className={`${
-                  userId == jobbyid?.createdBy
-                    ? "hidden"
-                    : "w-full px-6 py-2 text-sm font-medium text-white rounded-md"
-                } ${
-                  !isPending && !isError
-                    ? "bg-green-600 cursor-not-allowed"
-                    : "bg-blue-600"
-                }
-                `}
-                onClick={() => {
-                  applyJob(jobbyid._id);
-                }}
-              >
-                {isPending && isError && "Apply"}
-                {!isPending && !isError && "Applied"}
-              </button>
-            </div>
           </div>
         </div>
-        {isError ? error.message : ""}
         {/* description */}
 
         <div className="border mx-4 drop-shadow-2xl leading-relaxed bg-white my-4 rounded-lg">

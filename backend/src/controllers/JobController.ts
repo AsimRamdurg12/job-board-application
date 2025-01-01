@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { JobModel } from "../models/JobModel";
 import { CompanyModel } from "../models/CompanyModel";
-import { Types } from "mongoose";
 import { UserModel } from "../models/UserModel";
 
 export const createJob = async (req: Request, res: Response) => {
@@ -50,6 +49,12 @@ export const createJob = async (req: Request, res: Response) => {
     ).populate({
       path: "company",
     });
+
+    await CompanyModel.findByIdAndUpdate(
+      companyId,
+      { $push: { job: job._id } },
+      { new: true }
+    );
 
     if (!job) {
       res.status(403).json("Unable to create the job");
@@ -104,25 +109,11 @@ export const getMyJobs = async (req: Request, res: Response) => {
   try {
     //@ts-ignore
     const userId = req.id;
-
-    const keyword = req.query.keyword || "";
-    const location = req.query.location || "";
-
-    const query = {
-      $and: [
-        {
-          $or: [
-            { title: { $regex: keyword, $options: "i" } },
-            { description: { $regex: keyword, $options: "i" } },
-          ],
-        },
-        { location: { $regex: location, $options: "i" } },
-      ],
-    };
-
     const user = await UserModel.findById(userId);
 
-    const myJobs = await JobModel.find({ createdBy: user?._id });
+    const myJobs = await JobModel.find({ createdBy: user?._id }).populate({
+      path: "company",
+    });
 
     if (!myJobs) {
       res.status(404).json("no jobs found");

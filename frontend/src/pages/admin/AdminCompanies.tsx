@@ -27,8 +27,13 @@ const AdminCompanies = () => {
 
   return (
     <div className="mt-28 h-full mx-4">
-      <div className="flex justify-center mb-10">
+      <div className="flex justify-center mb-10 relative">
         <h1 className="text-3xl font-bold text-blue-600">List of Companies</h1>
+        <div className="absolute right-3">
+          <button className="border rounded-lg bg-orange-500 text-white px-4 py-1 text-lg font-semibold">
+            <a href="/admin/company/create">Create</a>
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
@@ -41,16 +46,13 @@ const AdminCompanies = () => {
                 job: string;
                 tagline: string;
               }) => (
-                <Link to={`/admin/company/${company._id}`}>
-                  <div
-                    className="flex gap-4 h-full border my-2 space mx-4 py-4 px-4 rounded-lg"
-                    key={company._id}
-                  >
+                <Link to={`/admin/company/${company._id}`} key={company._id}>
+                  <div className="flex gap-4 h-full border my-2 shadow-lg space mx-4 py-4 px-4 rounded-lg">
                     <div className="w-12 h-12">
                       <img
                         src={company.logo}
                         alt={company.name}
-                        className="w-full"
+                        className="w-full rounded-lg h-full"
                       />
                     </div>
                     <div className="flex items-center justify-between w-full">
@@ -60,10 +62,9 @@ const AdminCompanies = () => {
                             {company.name}
                           </h1>
                           <p className="text-xs text-gray-500">
-                            {company.job.length === 0
-                              ? "No"
-                              : company.job.length}{" "}
-                            Job openings
+                            {company.job.length === 1
+                              ? "1 Job Opening"
+                              : `${company.job.length} Job Openings`}
                           </p>
                         </div>
                         <div className="text-gray-600">{company.tagline}</div>

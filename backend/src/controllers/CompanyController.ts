@@ -2,11 +2,13 @@ import { Request, Response } from "express";
 import { CompanyModel } from "../models/CompanyModel";
 import { UserModel } from "../models/UserModel";
 import { JobModel } from "../models/JobModel";
+import { v2 as cloudinary } from "cloudinary";
 
 export const registerCompany = async (req: Request, res: Response) => {
   try {
-    const { name, tagline, description, website, logo, location } = req.body;
+    const { name, tagline, description, website, location } = req.body;
 
+    let { logo } = req.body;
     //@ts-ignore
     const userId = req.id;
 
@@ -23,6 +25,9 @@ export const registerCompany = async (req: Request, res: Response) => {
       res.status(401).json("Company already register");
       return;
     }
+
+    const cloudResponse = await cloudinary.uploader.upload(logo);
+    logo = cloudResponse.secure_url;
 
     const register = await CompanyModel.create({
       name: name,
@@ -87,7 +92,9 @@ export const getCompanybyId = async (req: Request, res: Response) => {
 
 export const updateCompany = async (req: Request, res: Response) => {
   try {
-    const { name, description, website, logo, location } = req.body;
+    const { name, description, website, location } = req.body;
+
+    let { logo } = req.body;
 
     const companyId = req.params.id;
     //@ts-ignore
@@ -102,11 +109,19 @@ export const updateCompany = async (req: Request, res: Response) => {
       return;
     }
 
-    let company = await CompanyModel.findById(companyId, userId);
+    let company = await CompanyModel.findById(companyId);
 
-    if (company?.userId !== user._id) {
+    if (company?.userId.toString() !== user._id.toString()) {
       res.status(403).json("Only company admin can update company details.");
       return;
+    }
+
+    if (logo) {
+      await cloudinary.uploader.destroy(logo);
+
+      const cloudResponse = await cloudinary.uploader.upload(logo);
+      logo = cloudResponse.secure_url;
+      company.logo = logo;
     }
 
     const updatedDetails = await company?.updateOne({
@@ -122,7 +137,7 @@ export const updateCompany = async (req: Request, res: Response) => {
       return;
     }
 
-    res.status(200).json({ updatedDetails });
+    res.status(200).json(updatedDetails);
   } catch (error: any) {
     console.log("error in updateCompany", error.message);
     res.status(500).json("internal server error");

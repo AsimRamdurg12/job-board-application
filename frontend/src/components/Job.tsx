@@ -2,12 +2,11 @@ import rupee from "../assets/rupee.svg";
 import location from "../assets/location.svg";
 import experience from "../assets/experience.svg";
 import document from "../assets/document.svg";
-import dot from "../assets/dot.svg";
 import { Link } from "react-router-dom";
 
 //@ts-expect-error job
 const Job = ({ job }) => {
-  console.log(job);
+  console.log(job.company);
 
   return (
     <div className="mt-3">
@@ -18,7 +17,7 @@ const Job = ({ job }) => {
         >
           <div className="flex gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
             <div className="w-6 h-6">
-              <Link to="/company/:id">
+              <Link to={`/company/${job.company}`}>
                 <img
                   src={job.company?.logo}
                   alt=""
@@ -73,11 +72,13 @@ const Job = ({ job }) => {
               {/* skills */}
 
               <div>
-                <ul className="flex text-gray-600 max-sm:text-sm flex-wrap">
+                <ul className="flex gap-2 text-gray-600 max-sm:text-sm flex-wrap">
                   {job.requirements.map(
                     (requirement: string, index: number) => (
-                      <li className="flex items-center" key={index}>
-                        <img src={dot} alt="" className="w-6 h-6" />
+                      <li
+                        className="flex items-center border px-2 py-1 bg-blue-600 text-white font-medium rounded-full"
+                        key={index}
+                      >
                         {requirement}
                       </li>
                     )

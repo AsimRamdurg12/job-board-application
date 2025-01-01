@@ -1,8 +1,10 @@
 import { Link, useParams } from "react-router-dom";
-import microsoft from "../../assets/microsoft.svg";
+import experience from "../../assets/experience.svg";
+import rupee from "../../assets/rupee.svg";
+import location from "../../assets/location.svg";
+import document from "../../assets/document.svg";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import dot from "../../assets/dot.svg";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import useProfile from "../../hooks/useProfile";
@@ -10,6 +12,7 @@ import { useState } from "react";
 
 const JobById = () => {
   const params = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [applicants, setApplicants] = useState<any[]>([]);
 
   const { authUser } = useProfile();
@@ -22,7 +25,10 @@ const JobById = () => {
       const response = await axios.get(`/api/job/${params.id}`);
       const result = await response.data;
 
+      console.log(result.createdAt);
+
       if (Array.isArray(result.applications)) {
+        //@ts-expect-error applicant
         setApplicants(result.applications.map((app) => app.applicant));
       }
 
@@ -46,7 +52,6 @@ const JobById = () => {
       try {
         const res = await axios.post(`/api/apply/${params.id}`);
         const result = await res.data;
-
         if (!result || !res) {
           console.log(result.error);
         }
@@ -67,6 +72,14 @@ const JobById = () => {
     },
   });
 
+  const daysAgoFunction = (time: Date) => {
+    const createdAt = new Date(time);
+    const currentTime = new Date();
+    //@ts-expect-error time
+    const timeDifference = currentTime - createdAt;
+    return Math.floor(timeDifference / (1000 * 24 * 60 * 60));
+  };
+
   if (isLoading) {
     return (
       <div>
@@ -82,8 +95,12 @@ const JobById = () => {
           <div className="flex justify-between gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
             <div className="flex gap-4">
               <div className="w-20 h-20 flex justify-center items-center">
-                <Link to="/company/:id">
-                  <img src={jobbyid?.company.logo} alt="" className="w-6 h-6" />
+                <Link to={`/company/${jobbyid.company._id}`}>
+                  <img
+                    src={jobbyid?.company.logo}
+                    alt={jobbyid.company.name}
+                    className="w-14 h-14 rounded-lg"
+                  />
                 </Link>
               </div>
               <div className="flex flex-col gap-2">
@@ -103,7 +120,7 @@ const JobById = () => {
                     <li className="flex items-center gap-2">
                       {" "}
                       <img
-                        src={microsoft}
+                        src={experience}
                         alt="experience"
                         className="w-3 h-3"
                       />{" "}
@@ -111,12 +128,12 @@ const JobById = () => {
                     </li>{" "}
                     |
                     <li className="flex items-center gap-2">
-                      <img src={microsoft} alt="rupees" className="w-3 h-3" />{" "}
+                      <img src={rupee} alt="rupees" className="w-3 h-3" />{" "}
                       {jobbyid?.salary}
                     </li>{" "}
                     |
                     <li className="flex items-center gap-2">
-                      <img src={microsoft} alt="location" className="w-4 h-4" />
+                      <img src={location} alt="location" className="w-4 h-4" />
                       {jobbyid?.location}
                     </li>
                   </ul>
@@ -125,7 +142,7 @@ const JobById = () => {
                 {/* Job Description */}
                 <div className="flex max-sm:text-sm items-center gap-2 text-gray-800">
                   <img
-                    src={microsoft}
+                    src={document}
                     alt="job description"
                     className="w-4 h-5 sm:w-3.5 sm:h-4"
                   />
@@ -135,20 +152,34 @@ const JobById = () => {
                 {/* skills */}
 
                 <div>
-                  <ul className="flex text-gray-600 flex-wrap max-sm:text-sm">
+                  <ul className="flex gap-2 text-gray-600 flex-wrap max-sm:text-sm">
                     {jobbyid?.requirements?.map(
                       (req: string, index: number) => (
-                        <li className="flex items-center" key={index}>
-                          <img src={dot} alt="" className="w-6 h-6 " />
+                        <li
+                          className="flex items-center border px-2 py-1 bg-blue-600 text-white font-medium rounded-full"
+                          key={index}
+                        >
                           {req}
                         </li>
                       )
                     )}
                   </ul>
                 </div>
+                <div className="flex gap-4 text-sm text-gray-600">
+                  {applicants.length === 1
+                    ? "1 Applicant"
+                    : `${applicants.length} Applicants`}
+
+                  <p>
+                    created:{" "}
+                    {daysAgoFunction(jobbyid.createdAt) === 0
+                      ? "today"
+                      : `${daysAgoFunction(jobbyid.createdAt)} days ago`}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="">
+            <div>
               <button
                 disabled={hasApplied ? true : false}
                 className={`${

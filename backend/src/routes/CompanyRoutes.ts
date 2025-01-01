@@ -15,7 +15,7 @@ router.post("/register", Protect, registerCompany);
 router.get("/companies", Protect, getAllCompanies);
 router.get("/mycompanies", Protect, getCompany);
 router.get("/:id", Protect, getCompanybyId);
+router.post("/update/:id", Protect, updateCompany);
 router.get("/:id/jobs", Protect, getCompanyJobs);
-router.put("/update/:id", Protect, updateCompany);
 
 export default router;

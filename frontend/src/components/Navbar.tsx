@@ -37,6 +37,7 @@ const Navbar: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
       navigate("/");
+      window.location.reload();
       toast.success("logged out successfully");
     },
   });
@@ -86,10 +87,18 @@ const Navbar: React.FC = () => {
         <Link to="/" className=" text-gray-500 hover:text-black">
           Home
         </Link>
-        <Link to="/companies" className=" text-gray-500 hover:text-black">
+        <Link
+          to={
+            authUser?.role === "recruiter" ? "/admin/companies" : "/companies"
+          }
+          className=" text-gray-500 hover:text-black"
+        >
           Companies
         </Link>
-        <Link to="/jobs" className=" text-gray-500 hover:text-black">
+        <Link
+          to={authUser?.role === "recruiter" ? "/admin/jobs" : "/jobs"}
+          className=" text-gray-500 hover:text-black"
+        >
           Jobs
         </Link>
       </div>
@@ -150,7 +159,7 @@ const Navbar: React.FC = () => {
               </a>
               <a
                 href={
-                  authUser.role === "recruiter"
+                  authUser?.role === "recruiter"
                     ? "/admin/companies"
                     : "/companies"
                 }
@@ -158,7 +167,10 @@ const Navbar: React.FC = () => {
               >
                 Companies
               </a>
-              <a href="/jobs" className="hover:bg-gray-100 p-2">
+              <a
+                href={authUser?.role === "recruiter" ? "/admin/jobs" : "/jobs"}
+                className="hover:bg-gray-100 p-2"
+              >
                 Jobs
               </a>
             </div>
