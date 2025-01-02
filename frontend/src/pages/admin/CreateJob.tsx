@@ -1,15 +1,19 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 interface CreateJobProps {
   title?: string;
   tag?: string;
   description?: string;
+  requirements?: string;
   salary?: string;
   experienceLevel?: string;
   location?: string;
   position?: string;
   jobType?: string;
-  company?: string;
 }
 
 const CreateJob = () => {
@@ -18,16 +22,76 @@ const CreateJob = () => {
       title: "",
       tag: "",
       description: "",
+      requirements: "",
       salary: "",
       experienceLevel: "",
       location: "",
       position: "",
       jobType: "",
-      company: "",
+    },
+  });
+
+  const { data: companies } = useQuery({
+    queryKey: ["companies"],
+    queryFn: async () => {
+      const res = await axios.get("/api/company/mycompanies");
+      const result = await res.data;
+
+      console.log(result);
+
+      return result;
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const [companyId, setCompanyId] = useState<string | null>(null);
+
+  const selectChangeHandler = (value) => {
+    const selectedCompany = companies.find(
+      (company: { name: string }) => company.name.toLowerCase() === value
+    );
+    setCompanyId(selectedCompany._id);
+  };
+
+  const { mutate: createJob, isPending } = useMutation({
+    mutationFn: async (data: CreateJobProps) => {
+      const formdata = new FormData();
+      formdata.append("title", data.title || "");
+      formdata.append("tag", data.tag || "");
+      formdata.append("description", data.description || "");
+      formdata.append("requirements", data.requirements || "");
+      formdata.append("salary", data.salary || "");
+      formdata.append("experienceLevel", data.experienceLevel || "");
+      formdata.append("jobType", data.jobType || "");
+      formdata.append("position", data.position || "");
+      formdata.append("location", data.location || "");
+      if (companyId) {
+        formdata.append("companyId", companyId);
+      }
+
+      const res = await axios.post("/api/job/create", formdata, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await res.data;
+      console.log(result);
+
+      return result;
+    },
+    onSuccess: () => {
+      toast.success("JOb Created");
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
+    },
+    onError: (error) => {
+      toast.error("Error while creating Job");
+      console.log(error.message);
     },
   });
 
   const handleChange = (data: CreateJobProps) => {
+    createJob(data);
     console.log(data);
   };
 
@@ -39,7 +103,7 @@ const CreateJob = () => {
         </div>
         <form
           className="place-items-center"
-          onChange={handleSubmit(handleChange)}
+          onSubmit={handleSubmit(handleChange)}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4 place-items-center">
             <div className="flex flex-col">
@@ -73,6 +137,17 @@ const CreateJob = () => {
                 placeholder="Enter description"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
                 {...register("description")}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="requirements" className="font-semibold">
+                Requirements
+              </label>
+              <input
+                type="text"
+                placeholder="Enter requirements"
+                className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
+                {...register("requirements")}
               />
             </div>
             <div className="flex flex-col">
@@ -137,12 +212,14 @@ const CreateJob = () => {
               </label>
               <select
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
-                {...register("company")}
+                onChange={selectChangeHandler}
               >
                 <option value="">Company Name</option>
-                <option value="">Google</option>
-                <option value="">Vise AI</option>
-                <option value="">Asim AI</option>
+                {companies?.map((company) => (
+                  <option value={company?.name.toLowerCase()}>
+                    {company?.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -150,7 +227,7 @@ const CreateJob = () => {
             type="submit"
             className="border px-4 py-2 bg-blue-600 text-white text-lg font-medium rounded-md"
           >
-            Create
+            {isPending ? "Creating..." : "Create"}
           </button>
         </form>
       </div>

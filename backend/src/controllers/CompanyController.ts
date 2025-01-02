@@ -108,8 +108,6 @@ export const updateCompany = async (req: Request, res: Response) => {
   try {
     const { name, description, website, location } = req.body;
 
-    let { logo } = req.body;
-
     const companyId = req.params.id;
     //@ts-ignore
     const userId = req.id;
@@ -130,12 +128,21 @@ export const updateCompany = async (req: Request, res: Response) => {
       return;
     }
 
-    if (logo) {
-      await cloudinary.uploader.destroy(logo);
+    let logo = (req.file as Express.Multer.File) ? req.file : null;
 
-      const cloudResponse = await cloudinary.uploader.upload(logo);
-      logo = cloudResponse.secure_url;
-      company.logo = logo;
+    let fileUri;
+
+    if ((logo = req.file as Express.Multer.File)) {
+      fileUri = getDataUri(logo);
+    }
+
+    let logoUrl;
+
+    if (logo) {
+      const cloudResponse = await cloudinary.uploader.upload(
+        fileUri?.content as string
+      );
+      logoUrl = cloudResponse.secure_url;
     }
 
     const updatedDetails = await company?.updateOne({
@@ -143,7 +150,7 @@ export const updateCompany = async (req: Request, res: Response) => {
       description,
       website,
       location,
-      logo,
+      logo: logoUrl,
     });
 
     if (!updatedDetails) {

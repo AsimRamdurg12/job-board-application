@@ -21,10 +21,10 @@ export const createJob = async (req: Request, res: Response) => {
     //@ts-ignore
     const userId = req.id;
 
-    const company = await CompanyModel.findById(companyId);
+    const company = await CompanyModel.findOne({ userId: userId });
 
     if (userId !== company?.userId.toString()) {
-      console.log(userId, company?.userId);
+      console.log(userId, company?.userId.toString());
 
       res
         .status(403)
@@ -37,13 +37,13 @@ export const createJob = async (req: Request, res: Response) => {
         title,
         tag,
         description,
-        requirements: requirements.split(","),
+        requirements: requirements.split(", "),
         salary,
         experienceLevel,
         location,
         jobType,
         position,
-        company: companyId,
+        company: company?._id,
         createdBy: userId,
       })
     ).populate({
