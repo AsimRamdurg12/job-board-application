@@ -11,8 +11,6 @@ const CompanyPage = () => {
       const res = await axios.get("/api/company/companies");
       const result = await res.data;
 
-      console.log(result);
-
       return result;
     },
   });
@@ -50,7 +48,7 @@ const CompanyPage = () => {
                       <img
                         src={company.logo}
                         alt={company.name}
-                        className="w-full"
+                        className="w-full h-full rounded-lg"
                       />
                     </div>
                     <div className="flex items-center justify-between w-full">

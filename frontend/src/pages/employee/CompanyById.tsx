@@ -90,7 +90,7 @@ const CompanyById = () => {
                               {companyJob?.title}
                             </h1>
                             <p className="text-sm sm:font-semibold">
-                              {company.name}
+                              {company?.name}
                             </p>
                           </div>
                         </div>
@@ -104,7 +104,7 @@ const CompanyById = () => {
                                 alt="experience"
                                 className="w-3 h-3"
                               />{" "}
-                              {companyJob.experienceLevel}
+                              {companyJob?.experienceLevel}
                             </li>{" "}
                             |
                             <li className="flex items-center gap-2">
@@ -113,7 +113,7 @@ const CompanyById = () => {
                                 alt="rupees"
                                 className="w-3 h-3"
                               />{" "}
-                              {companyJob.salary}
+                              {companyJob?.salary}
                             </li>{" "}
                             |
                             <li className="flex items-center gap-2">
@@ -122,7 +122,7 @@ const CompanyById = () => {
                                 alt="location"
                                 className="w-4 h-4"
                               />
-                              {companyJob.location}
+                              {companyJob?.location}
                             </li>
                           </ul>
                         </div>
@@ -134,7 +134,7 @@ const CompanyById = () => {
                             alt="job description"
                             className="w-4 h-5 sm:w-3.5 sm:h-4"
                           />
-                          <p>{companyJob.tag}</p>
+                          <p>{companyJob?.tag}</p>
                         </div>
 
                         {/* skills */}
@@ -143,7 +143,7 @@ const CompanyById = () => {
                           <ul className="flex gap-2 text-gray-600 max-sm:text-sm flex-wrap">
                             {
                               //@ts-expect-error no errors in map
-                              companyJob.requirements?.map(
+                              companyJob?.requirements?.map(
                                 (skill: string, index: number) => (
                                   <li
                                     key={index}

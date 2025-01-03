@@ -86,15 +86,9 @@ export const getCompany = async (req: Request, res: Response) => {
 
 export const getCompanybyId = async (req: Request, res: Response) => {
   try {
-    //@ts-ignore
-    const userId = req.id;
-
     const companyId = req.params.id;
 
-    const company = await CompanyModel.findOne({
-      _id: companyId,
-      userId: userId,
-    });
+    const company = await CompanyModel.findById(companyId);
     if (!company) {
       res.status(404).json("Company not found");
       return;

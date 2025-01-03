@@ -128,17 +128,27 @@ const ProfilePage: React.FC = () => {
               <tbody>
                 {appliedJobs ? (
                   appliedJobs?.map(
-                    (applied: {
-                      job: {
-                        title: string;
-                        company: { name: string };
-                      };
-                      status: string;
-                    }) => (
-                      <tr className="border-gray-300 text-center">
-                        <td className="font-medium">{applied.job?.title}</td>
+                    (
+                      applied: {
+                        job: {
+                          title: string;
+                          _id: string;
+                          company: { name: string; _id: number };
+                        };
+                        status: string;
+                      },
+                      index: number
+                    ) => (
+                      <tr className="border-gray-300 text-center" key={index}>
                         <td className="font-medium">
-                          {applied.job?.company.name}
+                          <a href={`/job/${applied?.job?._id}`}>
+                            {applied?.job?.title}
+                          </a>
+                        </td>
+                        <td className="font-medium">
+                          <a href={`/company/${applied?.job?.company._id}`}>
+                            {applied?.job?.company.name}
+                          </a>
                         </td>
                         <td
                           className={`${
@@ -155,7 +165,7 @@ const ProfilePage: React.FC = () => {
                     )
                   )
                 ) : (
-                  <div>No applied Jobs</div>
+                  <tr>No applied Jobs</tr>
                 )}
               </tbody>
             </table>
