@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import openeye from "../assets/openeye.svg";
+import closeeye from "../assets/closeeye.svg";
+import { useState } from "react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -25,6 +28,12 @@ const Login: React.FC = () => {
     defaultValues: { email: "", password: "", role: undefined },
     resolver: zodResolver(loginSchema),
   });
+
+  const [show, setShow] = useState(false);
+
+  const handleShow = () => {
+    setShow(!show);
+  };
 
   const queryClient = useQueryClient();
 
@@ -102,13 +111,21 @@ const Login: React.FC = () => {
               <label htmlFor="password" className="font-medium">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                placeholder="Enter Password"
-                {...register("password")}
-                className="border px-4 py-2 rounded-xl outline-blue-500 w-72 sm:w-80 shadow-md"
-              />
+              <div className="flex justify-between border py-2 rounded-xl outline-blue-500 w-72 sm:w-80 shadow-md">
+                <input
+                  type={show ? "text" : "password"}
+                  id="password"
+                  placeholder="Enter Password"
+                  {...register("password")}
+                  className="w-80 rounded-md px-4 outline-none"
+                />
+                <img
+                  src={show ? closeeye : openeye}
+                  alt=""
+                  onClick={handleShow}
+                  className="h-6 w-6 mr-1"
+                />
+              </div>
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
               )}

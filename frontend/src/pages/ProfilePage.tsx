@@ -2,15 +2,26 @@ import email from "../assets/email.svg";
 import mobile from "../assets/mobile.svg";
 import skills from "../assets/skills.svg";
 import useProfile from "../hooks/useProfile";
-import dot from "../assets/dot.svg";
 import menu from "../assets/menu.svg";
 import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const ProfilePage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const openRef = useRef(null);
 
   const { authUser } = useProfile();
+
+  const { data: appliedJobs } = useQuery({
+    queryKey: ["appliedJobs"],
+    queryFn: async () => {
+      const res = await axios.get("/api/apply/get");
+      const result = await res.data;
+      console.log(result);
+      return result;
+    },
+  });
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -28,8 +39,8 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   return (
-    <div className="mt-36 mb-36 sm:mb-0 flex justify-center">
-      <div className="h-full px-4 border max-w-3xl md:mx-auto w-full rounded-xl shadow-lg mx-4 pb-4 flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center mb-10">
+      <div className="h-full mt-36 px-4 border max-w-xl md:mx-auto rounded-xl shadow-lg mx-4 pb-4 flex flex-col items-center gap-4">
         <div className="mb-20 mt-5 w-full flex justify-center relative">
           <img
             src={authUser.profile.profilePhoto}
@@ -76,19 +87,80 @@ const ProfilePage: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-wrap justify-center items-center text-gray-700">
-          <img src={skills} alt="skills" className="h-4 w-4" />
+          <img src={skills} alt="skills" className="h-4 w-4 mr-2" />
 
-          {authUser.profile.skills.map((skill: string, index: number) => (
-            <div className="flex items-center" key={index}>
-              <img src={dot} alt="dot" className="h-4 w-4" />
-              <p>{skill}</p>
-            </div>
-          ))}
+          <div className="flex items-center gap-1">
+            {authUser.profile.skills.map((skill: string, index: number) => (
+              <p
+                key={index}
+                className="border px-2 py-1 rounded-full bg-blue-600 text-white font-medium"
+              >
+                {skill}
+              </p>
+            ))}
+          </div>
         </div>
 
-        <a href={authUser.profile.resume}>
+        <a
+          href={authUser.profile.resume}
+          target="_blank"
+          className="underline text-gray-700 hover:text-black"
+        >
           {authUser.profile.resumeOriginalName}
         </a>
+      </div>
+
+      {/* Applied Jobs */}
+      <div className="w-full max-w-xl">
+        {authUser?.role === "employee" && (
+          <div className="mx-auto bg-white shadow-lg flex flex-col justify-center items-center mt-10 border px-4 py-2 rounded-xl">
+            <h1 className="flex justify-start w-full my-4 text-lg font-semibold">
+              Applied Jobs
+            </h1>
+            <table className="border w-full border-black">
+              <thead>
+                <tr className="border-b border-black mx-1 text-blue-600">
+                  <th>Job Title</th>
+                  <th>Company</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {appliedJobs ? (
+                  appliedJobs?.map(
+                    (applied: {
+                      job: {
+                        title: string;
+                        company: { name: string };
+                      };
+                      status: string;
+                    }) => (
+                      <tr className="border-gray-300 text-center">
+                        <td className="font-medium">{applied.job?.title}</td>
+                        <td className="font-medium">
+                          {applied.job?.company.name}
+                        </td>
+                        <td
+                          className={`${
+                            applied.status === "rejected"
+                              ? "bg-red-500"
+                              : applied.status === "pending"
+                              ? "bg-gray-400"
+                              : "bg-green-500"
+                          } font-medium`}
+                        >
+                          {applied.status}
+                        </td>
+                      </tr>
+                    )
+                  )
+                ) : (
+                  <div>No applied Jobs</div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

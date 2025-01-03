@@ -64,7 +64,7 @@ export const getAppliedJobs = async (req: Request, res: Response) => {
       res.status(404).json("No applications found");
       return;
     } else {
-      res.status(200).json({ appliedJobs });
+      res.status(200).json(appliedJobs);
     }
   } catch (error: any) {
     console.log("error in getAppliedJobs", error.message);

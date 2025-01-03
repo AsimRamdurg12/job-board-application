@@ -1,10 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-// import { Link } from "react-router-dom";
+import openeye from "../assets/openeye.svg";
+import closeeye from "../assets/closeeye.svg";
 import { z } from "zod";
 
 const signupSchema = z.object({
@@ -34,6 +36,12 @@ const SignUp: React.FC = () => {
     },
     resolver: zodResolver(signupSchema),
   });
+
+  const [show, setShow] = useState(false);
+
+  const handleShow = () => {
+    setShow(!show);
+  };
 
   const navigate = useNavigate();
 
@@ -140,13 +148,21 @@ const SignUp: React.FC = () => {
               <label htmlFor="password" className="font-medium">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                placeholder="Enter Password"
-                {...register("password")}
-                className="border px-4 py-2 rounded-xl w-72 sm:w-80 outline-blue-500 shadow-md"
-              />
+              <div className="flex justify-between border py-2 rounded-xl outline-blue-500 w-72 sm:w-80 shadow-md">
+                <input
+                  type={show ? "text" : "password"}
+                  id="password"
+                  placeholder="Enter Password"
+                  {...register("password")}
+                  className="w-80 rounded-md px-4 outline-none"
+                />
+                <img
+                  src={show ? closeeye : openeye}
+                  alt=""
+                  onClick={handleShow}
+                  className="h-6 w-6 mr-1"
+                />
+              </div>
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
               )}

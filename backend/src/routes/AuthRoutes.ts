@@ -17,11 +17,11 @@ router.post("/logout", Protect, logout);
 router.get("/get", Protect, getProfile);
 router.post(
   "/update",
-  Protect,
   upload.fields([
     { name: "resume", maxCount: 1 },
     { name: "profilePhoto", maxCount: 1 },
   ]),
+  Protect,
   updateProfile
 );
 

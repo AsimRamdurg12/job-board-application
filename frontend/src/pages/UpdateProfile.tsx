@@ -187,6 +187,7 @@ const UpdateProfile: React.FC = () => {
               <PasswordInput
                 placeholder="current password"
                 name="currentPassword"
+                //@ts-expect-error current password
                 register={register}
               />
             </div>{" "}
@@ -195,6 +196,7 @@ const UpdateProfile: React.FC = () => {
               <PasswordInput
                 placeholder="new password"
                 name="newPassword"
+                //@ts-expect-error new password
                 register={register}
               />
             </div>

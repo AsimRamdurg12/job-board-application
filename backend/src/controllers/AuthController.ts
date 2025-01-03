@@ -137,13 +137,6 @@ export const updateProfile = async (req: Request, res: Response) => {
       return;
     }
 
-    let resume = (req.file as Express.Multer.File) ? req.file : null;
-
-    let fileUri;
-
-    if ((resume = req.file as Express.Multer.File)) {
-      fileUri = getDataUri(resume);
-    }
     if (
       (!newPassword && currentPassword) ||
       (!currentPassword && newPassword)
@@ -179,32 +172,29 @@ export const updateProfile = async (req: Request, res: Response) => {
       user.password = hashed;
     }
 
-    let profilePhoto = (req.file as Express.Multer.File) ? req.file : null;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-    let profileUri;
-    let profile_url;
-
-    if ((profilePhoto = req.file as Express.Multer.File)) {
-      profileUri = getDataUri(profilePhoto);
-    }
+    const resume = files.resume ? files.resume[0] : null;
+    const profilePhoto = files.profilePhoto ? files.profilePhoto[0] : null;
 
     if (profilePhoto) {
       if (user.profile?.profilePhoto) {
         await cloudinary.uploader.destroy(user.profile.profilePhoto);
       }
+      const profileUri = getDataUri(profilePhoto);
       const cloudResponse = await cloudinary.uploader.upload(
-        profileUri?.content as string
+        profileUri.content as string
       );
-      profile_url = cloudResponse.secure_url;
-      user.profile.profilePhoto = profile_url;
+      user.profile.profilePhoto = cloudResponse.secure_url;
     }
 
     if (resume) {
       if (user.profile?.resume) {
         await cloudinary.uploader.destroy(user.profile.resume);
       }
+      const fileUri = getDataUri(resume);
       const cloudResponse = await cloudinary.uploader.upload(
-        fileUri?.content as string
+        fileUri.content as string
       );
       user.profile.resume = cloudResponse.secure_url;
       user.profile.resumeOriginalName = resume.originalname;
