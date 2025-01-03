@@ -18,7 +18,6 @@ const ProfilePage: React.FC = () => {
     queryFn: async () => {
       const res = await axios.get("/api/apply/get");
       const result = await res.data;
-      console.log(result);
       return result;
     },
   });
@@ -43,7 +42,7 @@ const ProfilePage: React.FC = () => {
       <div className="h-full mt-36 px-4 border max-w-xl md:mx-auto rounded-xl shadow-lg mx-4 pb-4 flex flex-col items-center gap-4">
         <div className="mb-20 mt-5 w-full flex justify-center relative">
           <img
-            src={authUser.profile.profilePhoto}
+            src={authUser?.profile.profilePhoto}
             alt=""
             className="h-20 w-20 rounded-full absolute"
           />
@@ -63,34 +62,34 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col items-center">
-          <h1 className="font-semibold text-2xl">{authUser.name}</h1>
+          <h1 className="font-semibold text-2xl">{authUser?.name}</h1>
           <p className="text-xs font-medium text-gray-500">
-            {authUser.role.toUpperCase()}
+            {authUser?.role.toUpperCase()}
           </p>
         </div>
 
         <div className="text-center text-sm">
           Bio:
           <p className="text-gray-600">
-            {authUser.profile.bio === undefined ? "" : authUser.profile.bio}
+            {authUser?.profile.bio === undefined ? "" : authUser?.profile.bio}
           </p>
         </div>
         <div className="text-gray-700 flex gap-4">
           <p className="flex items-center gap-1">
             <img src={email} alt="email" className="h-4 w-4" />
-            <span>{authUser.email}</span>
+            <span>{authUser?.email}</span>
           </p>{" "}
           |
           <p className="flex items-center gap-1">
             <img src={mobile} alt="" className="h-4 w-4" />
-            <span>+91-{authUser.mobile}</span>
+            <span>+91-{authUser?.mobile}</span>
           </p>
         </div>
         <div className="flex flex-wrap justify-center items-center text-gray-700">
           <img src={skills} alt="skills" className="h-4 w-4 mr-2" />
 
           <div className="flex items-center gap-1">
-            {authUser.profile.skills.map((skill: string, index: number) => (
+            {authUser?.profile?.skills?.map((skill: string, index: number) => (
               <p
                 key={index}
                 className="border px-2 py-1 rounded-full bg-blue-600 text-white font-medium"
@@ -102,11 +101,11 @@ const ProfilePage: React.FC = () => {
         </div>
 
         <a
-          href={authUser.profile.resume}
+          href={authUser?.profile.resume}
           target="_blank"
-          className="underline text-gray-700 hover:text-black"
+          className="hover:underline text-gray-700 hover:text-black"
         >
-          {authUser.profile.resumeOriginalName}
+          {authUser?.profile.resumeOriginalName}
         </a>
       </div>
 
@@ -141,25 +140,31 @@ const ProfilePage: React.FC = () => {
                     ) => (
                       <tr className="border-gray-300 text-center" key={index}>
                         <td className="font-medium">
-                          <a href={`/job/${applied?.job?._id}`}>
+                          <a
+                            href={`/job/${applied?.job?._id}`}
+                            className="hover:underline"
+                          >
                             {applied?.job?.title}
                           </a>
                         </td>
                         <td className="font-medium">
-                          <a href={`/company/${applied?.job?.company._id}`}>
-                            {applied?.job?.company.name}
+                          <a
+                            href={`/company/${applied?.job?.company._id}`}
+                            className="hover:underline"
+                          >
+                            {applied?.job?.company?.name}
                           </a>
                         </td>
                         <td
                           className={`${
                             applied.status === "rejected"
-                              ? "bg-red-500"
+                              ? "text-red-500 underline"
                               : applied.status === "pending"
-                              ? "bg-gray-400"
-                              : "bg-green-500"
+                              ? "text-gray-40 underline0"
+                              : "text-green-5 underline00"
                           } font-medium`}
                         >
-                          {applied.status}
+                          {applied?.status?.toUpperCase()}
                         </td>
                       </tr>
                     )
