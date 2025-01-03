@@ -70,16 +70,16 @@ const AdminJobs = () => {
                 ) // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .map((job: any) => (
                   <div className="mt-3">
-                    <Link to={`/admin/job/${job._id}`}>
+                    <Link to={`/admin/job/${job?._id}`}>
                       <div
                         className=" mx-3 h-full sm:mx-2 border shadow-lg rounded-lg"
                         key={job._id}
                       >
                         <div className="flex gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
                           <div className="w-6 h-6">
-                            <Link to={`/admin/company/${job.company._id}`}>
+                            <Link to={`/admin/company/${job?.company?._id}`}>
                               <img
-                                src={job.company?.logo}
+                                src={job?.company?.logo}
                                 alt=""
                                 className="w-6 h-6 rounded-full"
                               />
@@ -156,9 +156,9 @@ const AdminJobs = () => {
                               </ul>
                             </div>
                             <div className="text-sm text-gray-600">
-                              {daysAgoFunction(job.createdAt) === 0
+                              {daysAgoFunction(job?.createdAt) === 0
                                 ? "posted today"
-                                : `${daysAgoFunction(job.createdAt)} days ago`}
+                                : `${daysAgoFunction(job?.createdAt)} days ago`}
                             </div>
                           </div>
                         </div>

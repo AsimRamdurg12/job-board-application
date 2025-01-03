@@ -15,16 +15,16 @@ export const createJob = async (req: Request, res: Response) => {
       location,
       jobType,
       position,
-      companyId,
+      company,
     } = req.body;
 
     //@ts-ignore
     const userId = req.id;
 
-    const company = await CompanyModel.findOne({ userId: userId });
+    const findcompany = await CompanyModel.findOne({ userId: userId });
 
-    if (userId !== company?.userId.toString()) {
-      console.log(userId, company?.userId.toString());
+    if (userId !== findcompany?.userId.toString()) {
+      console.log(userId, findcompany?.userId.toString());
 
       res
         .status(403)
@@ -32,26 +32,22 @@ export const createJob = async (req: Request, res: Response) => {
       return;
     }
 
-    const job = await (
-      await JobModel.create({
-        title,
-        tag,
-        description,
-        requirements: requirements.split(", "),
-        salary,
-        experienceLevel,
-        location,
-        jobType,
-        position,
-        company: company?._id,
-        createdBy: userId,
-      })
-    ).populate({
-      path: "company",
+    const job = await JobModel.create({
+      title,
+      tag,
+      description,
+      requirements: requirements.split(","),
+      salary,
+      experienceLevel,
+      location,
+      jobType,
+      position,
+      company: company,
+      createdBy: userId,
     });
 
     await CompanyModel.findByIdAndUpdate(
-      companyId,
+      company,
       { $push: { job: job._id } },
       { new: true }
     );

@@ -154,7 +154,11 @@ const UpdateProfile: React.FC = () => {
                 {...register("bio")}
               />
             </div>
-            <div className="flex flex-col">
+            <div
+              className={`${
+                authUser?.role === "recruiter" ? "hidden" : "flex flex-col"
+              }`}
+            >
               <label htmlFor="skills" className="font-semibold">
                 Skills{" "}
                 <span className="text-xs text-gray-600 flex flex-wrap">
@@ -168,7 +172,11 @@ const UpdateProfile: React.FC = () => {
                 {...register("skills")}
               />
             </div>
-            <div className="flex flex-col">
+            <div
+              className={`${
+                authUser?.role === "recruiter" ? "hidden" : "flex flex-col"
+              }`}
+            >
               <label htmlFor="" className="font-semibold">
                 Resume{" "}
                 <span className="text-xs text-gray-600">

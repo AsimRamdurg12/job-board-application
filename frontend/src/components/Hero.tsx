@@ -18,7 +18,11 @@ const Hero = () => {
         </h3>
         <Link
           to={`${authUser ? "/jobs" : "/signup"}`}
-          className="flex justify-center mt-8 px-8 py-3 bg-blue-600 w-fit text-xl sm:text-2xl font-medium sm:font-bold text-white rounded-lg"
+          className={`${
+            authUser?.role === "recruiter"
+              ? "hidden"
+              : "flex justify-center mt-8 px-8 py-3 bg-blue-600 w-fit text-xl sm:text-2xl font-medium sm:font-bold text-white rounded-lg"
+          }`}
         >
           Get Started
         </Link>

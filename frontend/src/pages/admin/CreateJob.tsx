@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -14,6 +13,7 @@ interface CreateJobProps {
   location?: string;
   position?: string;
   jobType?: string;
+  companyId: string;
 }
 
 const CreateJob = () => {
@@ -28,6 +28,7 @@ const CreateJob = () => {
       location: "",
       position: "",
       jobType: "",
+      companyId: "",
     },
   });
 
@@ -45,15 +46,6 @@ const CreateJob = () => {
 
   const queryClient = useQueryClient();
 
-  const [companyId, setCompanyId] = useState<string | null>(null);
-
-  const selectChangeHandler = (value) => {
-    const selectedCompany = companies.find(
-      (company: { name: string }) => company.name.toLowerCase() === value
-    );
-    setCompanyId(selectedCompany._id);
-  };
-
   const { mutate: createJob, isPending } = useMutation({
     mutationFn: async (data: CreateJobProps) => {
       const formdata = new FormData();
@@ -66,9 +58,7 @@ const CreateJob = () => {
       formdata.append("jobType", data.jobType || "");
       formdata.append("position", data.position || "");
       formdata.append("location", data.location || "");
-      if (companyId) {
-        formdata.append("companyId", companyId);
-      }
+      formdata.append("company", data.companyId || "");
 
       const res = await axios.post("/api/job/create", formdata, {
         headers: {
@@ -81,7 +71,7 @@ const CreateJob = () => {
       return result;
     },
     onSuccess: () => {
-      toast.success("JOb Created");
+      toast.success("Job Created");
       queryClient.invalidateQueries({ queryKey: ["companies"] });
     },
     onError: (error) => {
@@ -211,15 +201,17 @@ const CreateJob = () => {
                 Company
               </label>
               <select
+                {...register("companyId")}
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
-                onChange={selectChangeHandler}
               >
                 <option value="">Company Name</option>
-                {companies?.map((company) => (
-                  <option value={company?.name.toLowerCase()}>
-                    {company?.name}
-                  </option>
-                ))}
+                {companies?.map(
+                  (company: { _id: string; name: string }, index: number) => (
+                    <option key={index} value={company._id}>
+                      {company?.name}
+                    </option>
+                  )
+                )}
               </select>
             </div>
           </div>
