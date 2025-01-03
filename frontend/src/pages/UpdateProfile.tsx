@@ -17,11 +17,13 @@ interface UpdateProps {
   newPassword?: string;
   resume?: File;
   resumeOriginalName?: string;
+  profilePhoto: File;
 }
 
 const UpdateProfile: React.FC = () => {
   const { authUser } = useProfile();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
 
   const { register, handleSubmit } = useForm<UpdateProps>({
     defaultValues: {
@@ -29,11 +31,12 @@ const UpdateProfile: React.FC = () => {
       email: authUser.email,
       mobile: authUser.mobile,
       bio: authUser.profile.bio,
-      skills: authUser.profile.skills?.join(", "),
+      skills: authUser.profile.skills?.join(","),
       currentPassword: "",
       newPassword: "",
       resume: undefined,
       resumeOriginalName: authUser.profile.resumeOriginalName || "",
+      profilePhoto: undefined,
     },
   });
 
@@ -59,6 +62,9 @@ const UpdateProfile: React.FC = () => {
       if (resumeFile) {
         formData.append("resume", resumeFile);
         formData.append("resumeOriginalName", resumeFile?.name);
+      }
+      if (profilePhoto) {
+        formData.append("profilePhoto", profilePhoto);
       }
 
       const res = await axios.post("/api/auth/update", formData, {
@@ -103,6 +109,16 @@ const UpdateProfile: React.FC = () => {
                 placeholder="enter your name"
                 className="border w-80 rounded-md px-2 py-1 outline-none shadow-lg"
                 {...register("name")}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="profilePhoto" className="font-semibold">
+                Profile Photo
+              </label>
+              <input
+                type="file"
+                placeholder="enter your name"
+                onChange={(e) => setProfilePhoto(e.target.files?.[0] || null)}
               />
             </div>
             <div className="flex flex-col">

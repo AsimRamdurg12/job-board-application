@@ -86,12 +86,15 @@ export const getCompany = async (req: Request, res: Response) => {
 
 export const getCompanybyId = async (req: Request, res: Response) => {
   try {
+    //@ts-ignore
+    const userId = req.id;
+
     const companyId = req.params.id;
 
-    const company = await CompanyModel.findById(companyId).populate({
-      path: "job",
+    const company = await CompanyModel.findOne({
+      _id: companyId,
+      userId: userId,
     });
-
     if (!company) {
       res.status(404).json("Company not found");
       return;
@@ -106,7 +109,7 @@ export const getCompanybyId = async (req: Request, res: Response) => {
 
 export const updateCompany = async (req: Request, res: Response) => {
   try {
-    const { name, description, website, location } = req.body;
+    const { name, description, website, location, tagline } = req.body;
 
     const companyId = req.params.id;
     //@ts-ignore
@@ -139,19 +142,23 @@ export const updateCompany = async (req: Request, res: Response) => {
     let logoUrl;
 
     if (logo) {
+      if (company.logo) {
+        await cloudinary.uploader.destroy(company.logo);
+      }
       const cloudResponse = await cloudinary.uploader.upload(
         fileUri?.content as string
       );
       logoUrl = cloudResponse.secure_url;
+      company.logo = logoUrl;
     }
 
-    const updatedDetails = await company?.updateOne({
-      name,
-      description,
-      website,
-      location,
-      logo: logoUrl,
-    });
+    if (name) company.name = name;
+    if (tagline) company.tagline = tagline;
+    if (description) company.description = description;
+    if (website) company.website = website;
+    if (location) company.location = location;
+
+    const updatedDetails = await company.save();
 
     if (!updatedDetails) {
       res.status(403).json("unable to update company details");

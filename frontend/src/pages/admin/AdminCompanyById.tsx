@@ -3,18 +3,22 @@ import experience from "../../assets/experience.svg";
 import rupee from "../../assets/rupee.svg";
 import location from "../../assets/location.svg";
 import document from "../../assets/document.svg";
+import menu from "../../assets/menu.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Key } from "react";
+import { Key, useRef, useState } from "react";
 
-const AdminCompanyById = () => {
+const AdminCompanyById: React.FC = () => {
   const params = useParams();
+  const [open, setOpen] = useState<boolean>(false);
+  const openRef = useRef(null);
 
   const { data: company } = useQuery({
     queryKey: ["company"],
     queryFn: async () => {
       const res = await axios.get(`/api/company/${params.id}`);
-      const result = res.data;
+      const result = await res.data;
+      console.log(result);
 
       return result;
     },
@@ -44,9 +48,23 @@ const AdminCompanyById = () => {
           alt={company?.name}
           className="w-28 h-28 -mt-14 rounded-xl"
         />
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold">{company?.name}</h1>
-          <p className="font-medium text-gray-600">{company?.tagline}</p>
+        <div className="flex justify-between w-full">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold">{company?.name}</h1>
+            <p className="font-medium text-gray-600">{company?.tagline}</p>
+          </div>
+          <div
+            className="flex flex-col relative"
+            onClick={() => setOpen(!open)}
+            ref={openRef}
+          >
+            <img src={menu} alt="" className="w-6 h-6 cursor-pointer" />
+            {open && (
+              <div className="absolute right-4 top-7 shadow-md border px-4 py-2 rounded-lg hover:bg-gray-100">
+                <a href={`/admin/company/update/${params.id}`}>Update</a>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -58,6 +76,11 @@ const AdminCompanyById = () => {
       <div className="mx-4 mt-6 border rounded-lg shadow-lg mb-4">
         <div className="mx-4 mt-4 text-lg font-medium">Jobs</div>
         <div className="sm:mx-4 h-full grid lg:grid-cols-2 xl:grid-cols-3">
+          <div>
+            {companyJobs?.length === 1
+              ? "1 Job Opening"
+              : `${companyJobs?.length} Job Openings`}
+          </div>
           {companyJobs?.length === 0 ? (
             <div className="flex justify-center items-center mb-5">No Jobs</div>
           ) : (
@@ -71,7 +94,10 @@ const AdminCompanyById = () => {
                 tag: string;
                 requirements: string;
               }) => (
-                <Link to={`/admin/job/${companyJob?._id}`} key={companyJob._id}>
+                <Link
+                  to={`/admin/job/${companyJob?._id}`}
+                  key={companyJob?._id}
+                >
                   <div
                     className="my-5 mx-3 sm:mx-2 border shadow-lg rounded-lg"
                     key={companyJob?._id}

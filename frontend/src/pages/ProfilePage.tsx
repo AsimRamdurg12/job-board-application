@@ -89,60 +89,8 @@ const ProfilePage: React.FC = () => {
         <a href={authUser.profile.resume}>
           {authUser.profile.resumeOriginalName}
         </a>
-        <DownloadResume
-          fileUrl={authUser.profile.resume}
-          fileName={authUser.profile.resumeOriginalName}
-        />
       </div>
     </div>
-  );
-};
-
-interface DownloadResumeProps {
-  fileUrl: string; // Cloudinary URL for the uploaded file
-  fileName: string; // Desired filename for the download (e.g., "resume.pdf")
-}
-
-import axios from "axios";
-
-interface DownloadResumeProps {
-  fileUrl: string;
-  fileName: string;
-}
-
-const DownloadResume: React.FC<DownloadResumeProps> = ({
-  fileUrl,
-  fileName,
-}) => {
-  const handleDownload = async () => {
-    try {
-      const response = await axios.get(fileUrl, {
-        responseType: "blob", // Ensures the response is treated as a binary Blob
-        headers: {
-          "Content-Type": "application/octet-stream",
-        },
-      });
-
-      // Create a Blob URL and trigger the download
-      const blob = new Blob([response.data]);
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-
-      document.body.appendChild(link);
-      link.click();
-
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
-    } catch (error) {
-      console.error("Error downloading the resume:", error);
-    }
-  };
-
-  return (
-    <button onClick={handleDownload} className="download-button">
-      Download Resume
-    </button>
   );
 };
 

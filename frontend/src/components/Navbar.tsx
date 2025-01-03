@@ -118,14 +118,12 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div onClick={() => setProfile(!profile)} ref={profileRef}>
-          <div
-            className={`${
-              authUser
-                ? "flex items-center border p-2 rounded-full shadow-lg"
-                : "hidden"
-            }`}
-          >
-            <img src={authUser?.profilePhoto} alt="" className="h-6 w-6" />
+          <div className={`${authUser ? "flex" : "hidden"}`}>
+            <img
+              src={authUser?.profile.profilePhoto}
+              alt=""
+              className="h-10 w-10 rounded-full"
+            />
           </div>
 
           {profile && (

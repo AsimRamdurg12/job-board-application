@@ -3,7 +3,7 @@ import { UserModel } from "../models/UserModel";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
 import getDataUri from "../utils/datauri";
-import { z } from "zod";
+import { string, z } from "zod";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req: Request, res: Response) => {
@@ -127,16 +127,8 @@ export const updateProfile = async (req: Request, res: Response) => {
     //@ts-ignore
     const userId = req.id;
 
-    let {
-      name,
-      email,
-      mobile,
-      currentPassword,
-      newPassword,
-      bio,
-      skills,
-      profilePhoto,
-    } = req.body;
+    let { name, email, mobile, currentPassword, newPassword, bio, skills } =
+      req.body;
 
     const user = await UserModel.findById(userId);
 
@@ -187,13 +179,24 @@ export const updateProfile = async (req: Request, res: Response) => {
       user.password = hashed;
     }
 
+    let profilePhoto = (req.file as Express.Multer.File) ? req.file : null;
+
+    let profileUri;
+    let profile_url;
+
+    if ((profilePhoto = req.file as Express.Multer.File)) {
+      profileUri = getDataUri(profilePhoto);
+    }
+
     if (profilePhoto) {
       if (user.profile?.profilePhoto) {
         await cloudinary.uploader.destroy(user.profile.profilePhoto);
       }
-      const cloudResponse = await cloudinary.uploader.upload(profilePhoto);
-      profilePhoto = cloudResponse.secure_url;
-      user.profile.profilePhoto = profilePhoto;
+      const cloudResponse = await cloudinary.uploader.upload(
+        profileUri?.content as string
+      );
+      profile_url = cloudResponse.secure_url;
+      user.profile.profilePhoto = profile_url;
     }
 
     if (resume) {

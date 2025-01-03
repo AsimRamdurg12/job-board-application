@@ -36,7 +36,7 @@ const AdminCompanies = () => {
         </div>
       </div>
 
-      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
         {companies
           ? companies.map(
               (company: {
@@ -47,7 +47,7 @@ const AdminCompanies = () => {
                 tagline: string;
               }) => (
                 <Link to={`/admin/company/${company._id}`} key={company._id}>
-                  <div className="flex gap-4 h-full border my-2 shadow-lg space mx-4 py-4 px-4 rounded-lg">
+                  <div className="flex gap-4 h-full border my-2 shadow-lg py-4 px-4 rounded-lg">
                     <div className="w-12 h-12">
                       <img
                         src={company.logo}
