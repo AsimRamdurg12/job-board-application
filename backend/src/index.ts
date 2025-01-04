@@ -23,7 +23,7 @@ cloudinary.config({
 app.use(express.json({ limit: "5mb" }));
 app.use(
   cors({
-    origin: ["https://job-board-application-be.onrender.com"],
+    origin: ["https://job-board-application-p3ua.onrender.com"],
     methods: ["GET", "POST"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],

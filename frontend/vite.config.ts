@@ -17,8 +17,6 @@ export default defineConfig({
       "/api": {
         target: "https://job-board-application-be.onrender.com",
         changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
