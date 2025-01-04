@@ -8,7 +8,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://job-board-application-m61v.onrender.com",
         changeOrigin: true,
       },
     },
