@@ -12,6 +12,8 @@ import ApplicationRoutes from "./routes/ApplicationRoutes";
 const app = express();
 dotenv.config();
 
+const PORT = process.env.PORT || 3000;
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -21,8 +23,6 @@ cloudinary.config({
 app.use(express.json({ limit: "5mb" }));
 app.use(cors());
 app.use(cookieParser());
-
-const PORT = process.env.PORT || 3000;
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello Asim");
