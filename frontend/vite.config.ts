@@ -6,10 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
-        target: "https://job-board-application-be.onrender.com",
-        changeOrigin: true,
-      },
+      "/api": "https://job-board-application-be.onrender.com",
     },
   },
 });
