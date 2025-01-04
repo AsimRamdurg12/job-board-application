@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://job-board-application-m61v.onrender.com",
+        target: "https://job-board-application-be.onrender.com",
         changeOrigin: true,
       },
     },
