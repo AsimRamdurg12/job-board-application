@@ -75,12 +75,12 @@ const AdminCompanyById: React.FC = () => {
 
       <div className="mx-4 mt-6 border rounded-lg shadow-lg mb-4">
         <div className="mx-4 mt-4 text-lg font-medium">Jobs</div>
+        <div className="mx-4">
+          {companyJobs?.length === 1
+            ? "1 Job Opening"
+            : `${companyJobs?.length} Job Openings`}
+        </div>
         <div className="sm:mx-4 h-full grid lg:grid-cols-2 xl:grid-cols-3">
-          <div>
-            {companyJobs?.length === 1
-              ? "1 Job Opening"
-              : `${companyJobs?.length} Job Openings`}
-          </div>
           {companyJobs?.length === 0 ? (
             <div className="flex justify-center items-center mb-5">No Jobs</div>
           ) : (
