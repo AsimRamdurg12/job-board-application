@@ -11,11 +11,10 @@ export default defineConfig({
   //   },
   // });
   server: {
-    host: true,
-    port: 5173,
+    port: 3000,
     proxy: {
       "/api": {
-        target: "https://job-board-application-be.onrender.com",
+        target: "http://localhost:3000",
         changeOrigin: true,
       },
     },
