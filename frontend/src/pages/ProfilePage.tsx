@@ -85,28 +85,34 @@ const ProfilePage: React.FC = () => {
             <span>+91-{authUser?.mobile}</span>
           </p>
         </div>
-        <div className="flex flex-wrap justify-center items-center text-gray-700">
-          <img src={skills} alt="skills" className="h-4 w-4 mr-2" />
+        {authUser?.role !== "recruiter" && (
+          <div className="flex flex-wrap justify-center items-center text-gray-700">
+            <img src={skills} alt="skills" className="h-4 w-4 mr-2" />
 
-          <div className="flex items-center gap-1">
-            {authUser?.profile?.skills?.map((skill: string, index: number) => (
-              <p
-                key={index}
-                className="border px-2 py-1 rounded-full bg-blue-600 text-white font-medium"
-              >
-                {skill}
-              </p>
-            ))}
+            <div className="flex items-center gap-1">
+              {authUser?.profile?.skills?.map(
+                (skill: string, index: number) => (
+                  <p
+                    key={index}
+                    className="border px-2 py-1 rounded-full bg-blue-600 text-white font-medium"
+                  >
+                    {skill}
+                  </p>
+                )
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
-        <a
-          href={authUser?.profile.resume}
-          target="_blank"
-          className="hover:underline text-gray-700 hover:text-black"
-        >
-          {authUser?.profile.resumeOriginalName}
-        </a>
+        {authUser?.role !== "recruiter" && (
+          <a
+            href={authUser?.profile.resume}
+            target="_blank"
+            className="hover:underline text-gray-700 hover:text-black"
+          >
+            {authUser?.profile.resumeOriginalName}
+          </a>
+        )}
       </div>
 
       {/* Applied Jobs */}

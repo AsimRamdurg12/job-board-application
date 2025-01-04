@@ -70,7 +70,7 @@ const Login: React.FC = () => {
       toast.success("Logged in Successfully");
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
 
-      navigate("/");
+      navigate("/admin/companies");
     },
   });
 
