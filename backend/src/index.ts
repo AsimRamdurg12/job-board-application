@@ -28,7 +28,6 @@ app.use(
     credentials: true,
   })
 );
-<<<<<<< HEAD
 
 app.options(
   "*",
@@ -37,15 +36,15 @@ app.options(
     credentials: true,
   })
 );
-=======
-app.options("*", cors({
-  origin: "https://job-board-application-r7bl.onrender.com",
+
+app.options(
+  "*",
+  cors({
+    origin: "https://job-board-application-r7bl.onrender.com",
     credentials: true,
-}));
->>>>>>> f2b7603fdc78f3112f0553b4394b2020b4856ae2
+  })
+);
 app.use(cookieParser());
-
-
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello Asim");
