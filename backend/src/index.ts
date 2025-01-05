@@ -28,6 +28,10 @@ app.use(
     credentials: true,
   })
 );
+app.options("*", cors({
+  origin: "https://job-board-application-r7bl.onrender.com",
+    credentials: true,
+})
 app.use(cookieParser());
 
 
