@@ -24,10 +24,11 @@ cloudinary.config({
 app.use(express.json({ limit: "5mb" }));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://job-board-application-r7bl.onrender.com",
     credentials: true,
   })
 );
+<<<<<<< HEAD
 
 app.options(
   "*",
@@ -36,7 +37,15 @@ app.options(
     credentials: true,
   })
 );
+=======
+app.options("*", cors({
+  origin: "https://job-board-application-r7bl.onrender.com",
+    credentials: true,
+}));
+>>>>>>> f2b7603fdc78f3112f0553b4394b2020b4856ae2
 app.use(cookieParser());
+
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello Asim");
@@ -46,14 +55,6 @@ app.use("/api/auth", AuthRoutes);
 app.use("/api/company", CompanyRoutes);
 app.use("/api/job", JobRoutes);
 app.use("/api/apply", ApplicationRoutes);
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-  });
-}
 
 app.listen(PORT, async () => {
   console.log(`Running on http://localhost:${PORT}`);

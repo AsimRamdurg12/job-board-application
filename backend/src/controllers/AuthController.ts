@@ -94,8 +94,8 @@ export const login = async (req: Request, res: Response) => {
       res.cookie("jwt", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+        secure: true,
       });
 
       res.status(200).json({
@@ -112,7 +112,11 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: true, // Should match how the cookie was set
+    sameSite: "none", // Required for cross-origin cookies
+  });
     res.status(200).json("Logged Out Successfully");
     return;
   } catch (error: any) {
