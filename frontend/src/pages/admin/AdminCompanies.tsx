@@ -3,12 +3,13 @@ import arrowright from "../../assets/arrow-right.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { BACKEND_URL } from "../../utils/util";
 
 const AdminCompanies = () => {
   const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
     queryFn: async () => {
-      const res = await axios.get("/api/company/mycompanies");
+      const res = await axios.get(`${BACKEND_URL}/api/company/mycompanies`);
       const result = await res.data;
 
       console.log(result);

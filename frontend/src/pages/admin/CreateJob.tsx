@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../../utils/util";
 
 interface CreateJobProps {
   title?: string;
@@ -35,7 +36,7 @@ const CreateJob = () => {
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: async () => {
-      const res = await axios.get("/api/company/mycompanies");
+      const res = await axios.get(`${BACKEND_URL}/api/company/mycompanies`);
       const result = await res.data;
 
       console.log(result);
@@ -60,7 +61,7 @@ const CreateJob = () => {
       formdata.append("location", data.location || "");
       formdata.append("company", data.companyId || "");
 
-      const res = await axios.post("/api/job/create", formdata, {
+      const res = await axios.post(`${BACKEND_URL}/api/job/create`, formdata, {
         headers: {
           "Content-Type": "application/json",
         },

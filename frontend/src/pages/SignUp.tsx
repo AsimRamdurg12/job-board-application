@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import openeye from "../assets/openeye.svg";
 import closeeye from "../assets/closeeye.svg";
 import { z } from "zod";
+import { BACKEND_URL } from "../utils/util";
 
 const signupSchema = z.object({
   name: z.string().min(3).max(100, "Please enter your full name"),
@@ -51,7 +52,7 @@ const SignUp: React.FC = () => {
     isError,
   } = useMutation({
     mutationFn: async (data: SignupFormInputs) => {
-      const res = await axios.post("/api/auth/signup", {
+      const res = await axios.post(`${BACKEND_URL}/api/auth/signup`, {
         name: data.name,
         email: data.email,
         mobile: data.mobile,

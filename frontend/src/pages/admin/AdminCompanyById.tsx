@@ -7,6 +7,7 @@ import menu from "../../assets/menu.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Key, useRef, useState } from "react";
+import { BACKEND_URL } from "../../utils/util";
 
 const AdminCompanyById: React.FC = () => {
   const params = useParams();
@@ -16,7 +17,7 @@ const AdminCompanyById: React.FC = () => {
   const { data: company } = useQuery({
     queryKey: ["company"],
     queryFn: async () => {
-      const res = await axios.get(`/api/company/${params.id}`);
+      const res = await axios.get(`${BACKEND_URL}/api/company/${params.id}`);
       const result = await res.data;
       console.log(result);
 
@@ -27,7 +28,9 @@ const AdminCompanyById: React.FC = () => {
   const { data: companyJobs } = useQuery({
     queryKey: ["companyJobs"],
     queryFn: async () => {
-      const res = await axios.get(`/api/company/${params.id}/jobs`);
+      const res = await axios.get(
+        `${BACKEND_URL}/api/company/${params.id}/jobs`
+      );
       const result = res.data;
 
       if (!result) {
@@ -104,7 +107,7 @@ const AdminCompanyById: React.FC = () => {
                   >
                     <div className="flex gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
                       <div className="w-6 h-6">
-                        <Link to={`/admin/company/${company._id}`}>
+                        <Link to={`/admin/company/${company?._id}`}>
                           <img
                             src={company?.logo}
                             alt=""
@@ -119,7 +122,7 @@ const AdminCompanyById: React.FC = () => {
                               {companyJob?.title}
                             </h1>
                             <p className="text-sm sm:font-semibold">
-                              {company.name}
+                              {company?.name}
                             </p>
                           </div>
                         </div>
@@ -133,7 +136,7 @@ const AdminCompanyById: React.FC = () => {
                                 alt="experience"
                                 className="w-3 h-3"
                               />{" "}
-                              {companyJob.experienceLevel}
+                              {companyJob?.experienceLevel}
                             </li>{" "}
                             |
                             <li className="flex items-center gap-2">
@@ -142,7 +145,7 @@ const AdminCompanyById: React.FC = () => {
                                 alt="rupees"
                                 className="w-3 h-3"
                               />{" "}
-                              {companyJob.salary}
+                              {companyJob?.salary}
                             </li>{" "}
                             |
                             <li className="flex items-center gap-2">
@@ -151,7 +154,7 @@ const AdminCompanyById: React.FC = () => {
                                 alt="location"
                                 className="w-4 h-4"
                               />
-                              {companyJob.location}
+                              {companyJob?.location}
                             </li>
                           </ul>
                         </div>
@@ -163,7 +166,7 @@ const AdminCompanyById: React.FC = () => {
                             alt="job description"
                             className="w-4 h-5 sm:w-3.5 sm:h-4"
                           />
-                          <p>{companyJob.tag}</p>
+                          <p>{companyJob?.tag}</p>
                         </div>
 
                         {/* skills */}
@@ -172,7 +175,7 @@ const AdminCompanyById: React.FC = () => {
                           <ul className="flex gap-2 text-gray-600 max-sm:text-sm flex-wrap">
                             {
                               //@ts-expect-error no errors in map
-                              companyJob.requirements?.map(
+                              companyJob?.requirements?.map(
                                 (skill: string, index: number) => (
                                   <li
                                     className="flex items-center border px-2 py-1 bg-blue-600 text-white font-medium rounded-full"

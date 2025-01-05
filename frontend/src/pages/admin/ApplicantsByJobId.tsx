@@ -4,6 +4,7 @@ import { Key, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import menu from "../../assets/menu.svg";
+import { BACKEND_URL } from "../../utils/util";
 
 const ApplicantsByJobId = () => {
   const params = useParams();
@@ -42,7 +43,9 @@ const ApplicantsByJobId = () => {
     console.log("called");
 
     axios.defaults.withCredentials = true;
-    const res = await axios.post(`/api/apply/status/${id}`, { status });
+    const res = await axios.post(`${BACKEND_URL}/api/apply/status/${id}`, {
+      status,
+    });
     console.log(res);
     if (res.data.application.status) {
       toast.success(`application ${res.data.application.status}`);
@@ -71,17 +74,17 @@ const ApplicantsByJobId = () => {
               applicants.applications.map((application: any, index: number) => (
                 <tr key={index} className="border-b border-gray-300">
                   <td className="text-center">
-                    {application.applicant?.name || "N/A"}
+                    {application?.applicant?.name || "N/A"}
                   </td>
                   <td className="text-center">
-                    {application.applicant?.profile.resume ? (
+                    {application?.applicant?.profile.resume ? (
                       <a
-                        href={application.applicant.profile.resume}
+                        href={application?.applicant?.profile?.resume}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"
                       >
-                        {application.applicant.profile?.resumeOriginalName}
+                        {application?.applicant?.profile?.resumeOriginalName}
                       </a>
                     ) : (
                       "No Resume"
@@ -93,12 +96,12 @@ const ApplicantsByJobId = () => {
                     ref={openRef}
                   >
                     <div className="flex justify-center items-center">
-                      <p>{application.status}</p>
+                      <p>{application?.status}</p>
                       <img src={menu} alt="" className="w-5 h-5" />
                     </div>
                     {open && (
                       <div className="mt-5 absolute border right-20 md:right-12 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg">
-                        {applicationStatus.map((status, index) => {
+                        {applicationStatus?.map((status, index) => {
                           return (
                             <div
                               onClick={() =>

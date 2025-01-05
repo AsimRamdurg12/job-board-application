@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { BACKEND_URL } from "../../utils/util";
 
 interface CompanyProps {
   name?: string;
@@ -22,15 +23,12 @@ const UpdateCompany = () => {
   const { data: company, isLoading } = useQuery({
     queryKey: ["company"],
     queryFn: async () => {
-      const res = await axios.get(`/api/company/${params.id}`);
+      const res = await axios.get(`${BACKEND_URL}/api/company/${params.id}`);
       const result = await res.data;
-      console.log(result);
 
-      return res.data;
+      return result;
     },
   });
-
-  console.dir(company);
 
   const { register, handleSubmit } = useForm<CompanyProps>({
     defaultValues: {
@@ -62,7 +60,7 @@ const UpdateCompany = () => {
       }
 
       const res = await axios.post(
-        `/api/company/update/${params.id}`,
+        `${BACKEND_URL}/api/company/update/${params.id}`,
         formData,
         {
           headers: {

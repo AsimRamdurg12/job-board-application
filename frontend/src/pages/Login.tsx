@@ -8,6 +8,7 @@ import { z } from "zod";
 import openeye from "../assets/openeye.svg";
 import closeeye from "../assets/closeeye.svg";
 import { useState } from "react";
+import { BACKEND_URL } from "../utils/util";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -45,7 +46,7 @@ const Login: React.FC = () => {
     isError,
   } = useMutation({
     mutationFn: async (data: LoginFormInputs) => {
-      const response = await axios.post("api/auth/login", {
+      const response = await axios.post(`${BACKEND_URL}/api/auth/login`, {
         email: data.email,
         password: data.password,
         role: data.role,

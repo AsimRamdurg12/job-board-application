@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../../utils/util";
 
 interface CompanyProps {
   name?: string;
@@ -44,11 +45,15 @@ const CreateCompany = () => {
         formData.append("logo", logo); // Directly append the File object
       }
 
-      const res = await axios.post("/api/company/register", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axios.post(
+        `${BACKEND_URL}/api/company/register`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       return res.data; // Assuming API response has data
     },

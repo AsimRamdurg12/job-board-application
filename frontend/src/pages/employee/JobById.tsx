@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import useProfile from "../../hooks/useProfile";
 import { useState } from "react";
+import { BACKEND_URL } from "../../utils/util";
 
 const JobById = () => {
   const params = useParams();
@@ -22,7 +23,7 @@ const JobById = () => {
   const { data: jobbyid, isLoading } = useQuery({
     queryKey: ["jobbyid"],
     queryFn: async () => {
-      const response = await axios.get(`/api/job/${params.id}`);
+      const response = await axios.get(`${BACKEND_URL}/api/job/${params.id}`);
       const result = await response.data;
 
       console.log(result.createdAt);
@@ -50,7 +51,7 @@ const JobById = () => {
   } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await axios.post(`/api/apply/${params.id}`);
+        const res = await axios.post(`${BACKEND_URL}/api/apply/${params.id}`);
         const result = await res.data;
         if (!result || !res) {
           console.log(result.error);
@@ -95,10 +96,10 @@ const JobById = () => {
           <div className="flex justify-between gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
             <div className="flex gap-4">
               <div className="w-20 h-20 flex justify-center items-center">
-                <Link to={`/company/${jobbyid.company._id}`}>
+                <Link to={`/company/${jobbyid?.company?._id}`}>
                   <img
-                    src={jobbyid?.company.logo}
-                    alt={jobbyid.company.name}
+                    src={jobbyid?.company?.logo}
+                    alt={jobbyid.company?.name}
                     className="w-14 h-14 rounded-lg"
                   />
                 </Link>
@@ -146,7 +147,7 @@ const JobById = () => {
                     alt="job description"
                     className="w-4 h-5 sm:w-3.5 sm:h-4"
                   />
-                  <p>{jobbyid.tag}</p>
+                  <p>{jobbyid?.tag}</p>
                 </div>
 
                 {/* skills */}
@@ -166,15 +167,15 @@ const JobById = () => {
                   </ul>
                 </div>
                 <div className="flex gap-4 text-sm text-gray-600">
-                  {applicants.length === 1
+                  {applicants?.length === 1
                     ? "1 Applicant"
-                    : `${applicants.length} Applicants`}
+                    : `${applicants?.length} Applicants`}
 
                   <p>
                     created:{" "}
-                    {daysAgoFunction(jobbyid.createdAt) === 0
+                    {daysAgoFunction(jobbyid?.createdAt) === 0
                       ? "today"
-                      : `${daysAgoFunction(jobbyid.createdAt)} days ago`}
+                      : `${daysAgoFunction(jobbyid?.createdAt)} days ago`}
                   </p>
                 </div>
               </div>
@@ -183,7 +184,7 @@ const JobById = () => {
               <button
                 disabled={hasApplied ? true : false}
                 className={`${
-                  userId == jobbyid?.createdBy || authUser.role === "recruiter"
+                  userId == jobbyid?.createdBy || authUser?.role === "recruiter"
                     ? "hidden"
                     : "w-full px-6 py-2 text-sm font-medium text-white rounded-md"
                 } ${
@@ -191,7 +192,7 @@ const JobById = () => {
                 }
                 `}
                 onClick={() => {
-                  applyJob(jobbyid._id);
+                  applyJob(jobbyid?._id);
                 }}
               >
                 {!hasApplied && "Apply"}

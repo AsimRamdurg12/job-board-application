@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import dot from "../../assets/dot.svg";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { BACKEND_URL } from "../../utils/util";
 
 const AdminJobById = () => {
   const params = useParams();
@@ -14,7 +15,7 @@ const AdminJobById = () => {
   const { data: jobbyid, isLoading } = useQuery({
     queryKey: ["jobbyid"],
     queryFn: async () => {
-      const response = await axios.get(`/api/job/${params.id}`);
+      const response = await axios.get(`${BACKEND_URL}/api/job/${params.id}`);
       const result = await response.data;
 
       if (!result || !response) {
@@ -39,9 +40,9 @@ const AdminJobById = () => {
           <div className="flex justify-between gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
             <div className="flex gap-4">
               <div className="w-20 h-20 flex justify-center items-center">
-                <Link to={`/admin/company/${jobbyid.company._id}`}>
+                <Link to={`/admin/company/${jobbyid?.company?._id}`}>
                   <img
-                    src={jobbyid?.company.logo}
+                    src={jobbyid?.company?.logo}
                     alt=""
                     className="w-14 h-14 rounded-lg"
                   />
@@ -90,7 +91,7 @@ const AdminJobById = () => {
                     alt="job description"
                     className="w-4 h-5 sm:w-3.5 sm:h-4"
                   />
-                  <p>{jobbyid.tag}</p>
+                  <p>{jobbyid?.tag}</p>
                 </div>
 
                 {/* skills */}

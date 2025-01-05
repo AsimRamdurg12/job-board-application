@@ -6,6 +6,7 @@ import useProfile from "../hooks/useProfile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../utils/util";
 
 interface UpdateProps {
   name?: string;
@@ -67,7 +68,7 @@ const UpdateProfile: React.FC = () => {
         formData.append("profilePhoto", profilePhoto);
       }
 
-      const res = await axios.post("/api/auth/update", formData, {
+      const res = await axios.post(`${BACKEND_URL}/api/auth/update`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

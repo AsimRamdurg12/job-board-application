@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useProfile from "../hooks/useProfile";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../utils/util";
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -21,7 +22,7 @@ const Navbar: React.FC = () => {
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await axios.post("/api/auth/logout");
+        const res = await axios.post(`${BACKEND_URL}/api/auth/logout`);
         const result = res.data;
 
         if (!result) {
@@ -120,7 +121,7 @@ const Navbar: React.FC = () => {
         <div onClick={() => setProfile(!profile)} ref={profileRef}>
           <div className={`${authUser ? "flex" : "hidden"}`}>
             <img
-              src={authUser?.profile.profilePhoto}
+              src={authUser?.profile?.profilePhoto}
               alt=""
               className="h-10 w-10 rounded-full"
             />

@@ -6,6 +6,7 @@ import document from "../../assets/document.svg";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Key } from "react";
+import { BACKEND_URL } from "../../utils/util";
 
 const CompanyById = () => {
   const params = useParams();
@@ -13,7 +14,7 @@ const CompanyById = () => {
   const { data: company } = useQuery({
     queryKey: ["company"],
     queryFn: async () => {
-      const res = await axios.get(`/api/company/${params.id}`);
+      const res = await axios.get(`${BACKEND_URL}/api/company/${params.id}`);
       const result = res.data;
 
       return result;
@@ -23,7 +24,9 @@ const CompanyById = () => {
   const { data: companyJobs } = useQuery({
     queryKey: ["companyJobs"],
     queryFn: async () => {
-      const res = await axios.get(`/api/company/${params.id}/jobs`);
+      const res = await axios.get(
+        `${BACKEND_URL}/api/company/${params.id}/jobs`
+      );
       const result = res.data;
 
       if (!result) {

@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { BACKEND_URL } from "../utils/util";
 
 const useProfile = () => {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
       try {
-        const res = await axios.get("/api/auth/get");
+        const res = await axios.get(`${BACKEND_URL}/api/auth/get`);
         const data = await res.data;
 
         if (!data) {

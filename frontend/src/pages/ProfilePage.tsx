@@ -6,6 +6,7 @@ import menu from "../assets/menu.svg";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { BACKEND_URL } from "../utils/util";
 
 const ProfilePage: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -16,7 +17,7 @@ const ProfilePage: React.FC = () => {
   const { data: appliedJobs } = useQuery({
     queryKey: ["appliedJobs"],
     queryFn: async () => {
-      const res = await axios.get("/api/apply/get");
+      const res = await axios.get(`${BACKEND_URL}/api/apply/get`);
       const result = await res.data;
       return result;
     },
@@ -42,7 +43,7 @@ const ProfilePage: React.FC = () => {
       <div className="h-full mt-36 px-4 border max-w-xl md:mx-auto rounded-xl shadow-lg mx-4 pb-4 flex flex-col items-center gap-4">
         <div className="mb-20 mt-5 w-full flex justify-center relative">
           <img
-            src={authUser?.profile.profilePhoto}
+            src={authUser?.profile?.profilePhoto}
             alt=""
             className="h-20 w-20 rounded-full absolute"
           />
@@ -64,14 +65,14 @@ const ProfilePage: React.FC = () => {
         <div className="flex flex-col items-center">
           <h1 className="font-semibold text-2xl">{authUser?.name}</h1>
           <p className="text-xs font-medium text-gray-500">
-            {authUser?.role.toUpperCase()}
+            {authUser?.role?.toUpperCase()}
           </p>
         </div>
 
         <div className="text-center text-sm">
           Bio:
           <p className="text-gray-600">
-            {authUser?.profile.bio === undefined ? "" : authUser?.profile.bio}
+            {authUser?.profile?.bio === undefined ? "" : authUser?.profile.bio}
           </p>
         </div>
         <div className="text-gray-700 flex gap-4">
@@ -106,11 +107,11 @@ const ProfilePage: React.FC = () => {
 
         {authUser?.role !== "recruiter" && (
           <a
-            href={authUser?.profile.resume}
+            href={authUser?.profile?.resume}
             target="_blank"
             className="hover:underline text-gray-700 hover:text-black"
           >
-            {authUser?.profile.resumeOriginalName}
+            {authUser?.profile?.resumeOriginalName}
           </a>
         )}
       </div>
@@ -155,7 +156,7 @@ const ProfilePage: React.FC = () => {
                         </td>
                         <td className="font-medium">
                           <a
-                            href={`/company/${applied?.job?.company._id}`}
+                            href={`/company/${applied?.job?.company?._id}`}
                             className="hover:underline"
                           >
                             {applied?.job?.company?.name}

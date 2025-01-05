@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Job from "../../components/Job";
 import { useRef, useState } from "react";
+import { BACKEND_URL } from "../../utils/util";
 
 const JobsPage = () => {
   const [input, setInput] = useState<string | undefined>("");
@@ -13,7 +14,9 @@ const JobsPage = () => {
   const { data: getJobs } = useQuery({
     queryKey: ["getJobs"],
     queryFn: async () => {
-      const res = await axios.get(`/api/job/jobs?keyword=${input}`);
+      const res = await axios.get(
+        `${BACKEND_URL}/api/job/jobs?keyword=${input}`
+      );
       console.log(res);
 
       const result = await res.data;
