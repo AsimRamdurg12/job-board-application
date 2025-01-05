@@ -10,16 +10,16 @@ const Job = ({ job }) => {
 
   return (
     <div className="mt-3">
-      <Link to={`/job/${job._id}`}>
+      <Link to={`/job/${job?._id}`}>
         <div
           className=" mx-3 h-full sm:mx-2 border shadow-lg rounded-lg"
-          key={job._id}
+          key={job?._id}
         >
           <div className="flex gap-2 sm:gap-4 sm:mx-4 mx-2 my-4">
             <div className="w-6 h-6">
-              <Link to={`/company/${job.company}`}>
+              <Link to={`/company/${job?.company}`}>
                 <img
-                  src={job.company?.logo}
+                  src={job?.company?.logo}
                   alt=""
                   className="w-6 h-6 rounded-full"
                 />
@@ -28,9 +28,9 @@ const Job = ({ job }) => {
             <div className="flex flex-col gap-2">
               <div className="flex justify-between">
                 <div>
-                  <h1 className="sm:text-xl font-semibold">{job.title}</h1>
+                  <h1 className="sm:text-xl font-semibold">{job?.title}</h1>
                   <p className="text-sm sm:font-semibold">
-                    {job.company?.name}
+                    {job?.company?.name}
                   </p>
                 </div>
               </div>
@@ -44,17 +44,17 @@ const Job = ({ job }) => {
                       alt="experience"
                       className="w-3 h-3"
                     />{" "}
-                    {job.experienceLevel}
+                    {job?.experienceLevel}
                   </li>{" "}
                   |
                   <li className="flex items-center gap-2">
                     <img src={rupee} alt="rupees" className="w-3 h-3" />{" "}
-                    {job.salary}
+                    {job?.salary}
                   </li>{" "}
                   |
                   <li className="flex items-center gap-2">
                     <img src={location} alt="location" className="w-4 h-4" />
-                    {job.location}
+                    {job?.location}
                   </li>
                 </ul>
               </div>
@@ -66,14 +66,14 @@ const Job = ({ job }) => {
                   alt="job description"
                   className="w-4 h-5 sm:w-3.5 sm:h-4"
                 />
-                <p>{job.tag}</p>
+                <p>{job?.tag}</p>
               </div>
 
               {/* skills */}
 
               <div>
                 <ul className="flex gap-2 text-gray-600 max-sm:text-sm flex-wrap">
-                  {job.requirements.map(
+                  {job?.requirements?.map(
                     (requirement: string, index: number) => (
                       <li
                         className="flex items-center border px-2 py-1 bg-blue-600 text-white font-medium rounded-full"

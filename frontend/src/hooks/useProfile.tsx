@@ -7,6 +7,7 @@ const useProfile = () => {
     queryKey: ["authUser"],
     queryFn: async () => {
       try {
+        axios.defaults.withCredentials = true;
         const res = await axios.get(`${BACKEND_URL}/api/auth/get`);
         const data = await res.data;
 

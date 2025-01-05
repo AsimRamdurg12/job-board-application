@@ -9,7 +9,7 @@
     "frontend-build": "cd ../frontend && npm install && npm run build",
     "backend-build": "npm install && npx tsc -b",
     "build": "npm run backend-build && npm run frontend-build",
-    "dev":   "NODE_ENV=development nodemon dist/index.js"
+    "dev":   "nodemon dist/index.js"
  
   },
   "keywords": [],

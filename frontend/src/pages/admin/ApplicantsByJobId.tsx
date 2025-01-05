@@ -1,43 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Key, useEffect, useRef, useState } from "react";
+import { Key } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import menu from "../../assets/menu.svg";
 import { BACKEND_URL } from "../../utils/util";
 
 const ApplicantsByJobId = () => {
   const params = useParams();
-
-  const [open, setOpen] = useState(false);
-
-  const openRef = useRef(null);
 
   const applicationStatus = ["pending", "rejected", "accepted"];
 
   const { data: applicants } = useQuery({
     queryKey: ["applicants"],
     queryFn: async () => {
-      const res = await axios.get(`/api/apply/applicants/${params.id}`);
+      const res = await axios.get(
+        `${BACKEND_URL}/api/apply/applicants/${params.id}`
+      );
       const result = res.data;
       console.log(result);
 
       return result;
     },
   });
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      //@ts-expect-error e.target
-      if (!openRef.current?.contains(e.target)) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClick);
-
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
 
   const statusHandler = async (status: string, id: Key) => {
     console.log("called");
@@ -50,7 +34,6 @@ const ApplicantsByJobId = () => {
     if (res.data.application.status) {
       toast.success(`application ${res.data.application.status}`);
     }
-    window.location.reload();
   };
 
   return (
@@ -90,32 +73,26 @@ const ApplicantsByJobId = () => {
                       "No Resume"
                     )}
                   </td>
-                  <td
-                    className="place-items-center"
-                    onClick={() => setOpen(!open)}
-                    ref={openRef}
-                  >
-                    <div className="flex justify-center items-center">
-                      <p>{application?.status}</p>
-                      <img src={menu} alt="" className="w-5 h-5" />
-                    </div>
-                    {open && (
-                      <div className="mt-5 absolute border right-20 md:right-12 w-[140px] flex flex-col font-medium gap-2 rounded-lg shadow-lg">
-                        {applicationStatus?.map((status, index) => {
-                          return (
-                            <div
-                              onClick={() =>
-                                statusHandler(status, application?._id)
-                              }
-                              key={index}
-                              className="flex items-center my-2 cursor-pointer"
-                            >
-                              <span>{status}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                  <td className="place-items-center">
+                    <select
+                      className=" px-2 flex flex-col font-medium gap-2"
+                      onChange={(e) =>
+                        statusHandler(e.target.value, application._id)
+                      }
+                    >
+                      <option>{application?.status}</option>
+                      {applicationStatus?.map((status, index) => {
+                        return (
+                          <option
+                            value={status}
+                            key={index}
+                            className="flex items-center my-2 cursor-pointer"
+                          >
+                            {status}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </td>
                 </tr>
               ))
