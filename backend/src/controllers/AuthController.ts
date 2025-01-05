@@ -112,7 +112,11 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: true, // Should match how the cookie was set
+    sameSite: "none", // Required for cross-origin cookies
+  });
     res.status(200).json("Logged Out Successfully");
     return;
   } catch (error: any) {
