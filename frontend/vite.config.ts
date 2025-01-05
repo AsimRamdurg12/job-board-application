@@ -8,4 +8,12 @@ export default defineConfig({
   build: {
     outDir: "dist", // Ensure the output directory matches your backend's static folder configuration
   },
+  server: {
+    proxy: {
+      "/api" : {
+        target: "https://job-board-application-be.onrender.com",
+        changeOrigin: true,
+      }
+    }
+  }
 });
