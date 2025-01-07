@@ -164,11 +164,11 @@ const ProfilePage: React.FC = () => {
                         </td>
                         <td
                           className={`${
-                            applied.status === "rejected"
-                              ? "text-red-500 underline"
-                              : applied.status === "pending"
-                              ? "text-gray-40 underline0"
-                              : "text-green-5 underline00"
+                            (applied?.status === "rejected" &&
+                              "text-red-500") ||
+                            (applied?.status === "accepted" &&
+                              "text-green-500") ||
+                            (applied?.status === "pending" && "text-gray-500")
                           } font-medium`}
                         >
                           {applied?.status?.toUpperCase()}

@@ -23,7 +23,7 @@ cloudinary.config({
 app.use(express.json({ limit: "5mb" }));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://job-board-application-production.up.railway.app",
     credentials: true,
   })
 );
@@ -31,7 +31,7 @@ app.use(
 app.options(
   "*",
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://job-board-application-production.up.railway.app",
     credentials: true,
   })
 );
