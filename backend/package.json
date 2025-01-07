@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "render-postbuild": "cd frontend && npm install --production=false && cd /opt/render/project/src/frontend && npm run build",
-    "start": "NODE_ENV=production node dist/index.js",
-    "frontend-build": "cd ../frontend && npm install && npm run build",
-    "backend-build": "npm install && npx tsc -b",
-    "build": "npm run backend-build && npm run frontend-build",
+    "start": "node dist/index.js",
+    "build": "npm install && npx tsc -b",
     "dev":   "nodemon dist/index.js"
  
   },
