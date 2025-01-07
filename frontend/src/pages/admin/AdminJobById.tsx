@@ -109,11 +109,11 @@ const AdminJobById = () => {
                   </ul>
                 </div>
                 <a
-                  href={`/admin/applicants/job/${jobbyid._id}`}
+                  href={`/admin/applicants/job/${jobbyid?._id}`}
                   className="underline hover:text-black text-gray-600"
                 >
-                  {jobbyid.applications.length}{" "}
-                  {jobbyid.applications.length === 1
+                  {jobbyid?.applications?.length}{" "}
+                  {jobbyid?.applications?.length === 1
                     ? "Applicant"
                     : "Applicants"}
                 </a>

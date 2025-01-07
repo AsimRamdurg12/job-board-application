@@ -76,13 +76,11 @@ const Navbar: React.FC = () => {
       </a>
       <div
         className={`
-          
           ${
             authUser
               ? "hidden md:flex justify-between items-center gap-4"
               : "hidden"
-          }
-            
+          }    
         `}
       >
         <Link to="/" className=" text-gray-500 hover:text-black">

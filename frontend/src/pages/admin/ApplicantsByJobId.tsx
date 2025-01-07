@@ -17,7 +17,6 @@ const ApplicantsByJobId = () => {
         `${BACKEND_URL}/api/apply/applicants/${params.id}`
       );
       const result = res.data;
-      console.log(result);
 
       return result;
     },
@@ -30,7 +29,6 @@ const ApplicantsByJobId = () => {
     const res = await axios.post(`${BACKEND_URL}/api/apply/status/${id}`, {
       status,
     });
-    console.log(res);
     if (res.data.application.status) {
       toast.success(`application ${res.data.application.status}`);
     }
@@ -60,7 +58,7 @@ const ApplicantsByJobId = () => {
                     {application?.applicant?.name || "N/A"}
                   </td>
                   <td className="text-center">
-                    {application?.applicant?.profile.resume ? (
+                    {application?.applicant?.profile?.resume ? (
                       <a
                         href={application?.applicant?.profile?.resume}
                         target="_blank"

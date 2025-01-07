@@ -17,7 +17,6 @@ const JobsPage = () => {
       const res = await axios.get(
         `${BACKEND_URL}/api/job/jobs?keyword=${input}`
       );
-      console.log(res);
 
       const result = await res.data;
       return result;

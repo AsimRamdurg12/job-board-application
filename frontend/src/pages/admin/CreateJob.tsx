@@ -39,8 +39,6 @@ const CreateJob = () => {
       const res = await axios.get(`${BACKEND_URL}/api/company/mycompanies`);
       const result = await res.data;
 
-      console.log(result);
-
       return result;
     },
   });
@@ -67,7 +65,6 @@ const CreateJob = () => {
         },
       });
       const result = await res.data;
-      console.log(result);
 
       return result;
     },
@@ -83,7 +80,6 @@ const CreateJob = () => {
 
   const handleChange = (data: CreateJobProps) => {
     createJob(data);
-    console.log(data);
   };
 
   return (

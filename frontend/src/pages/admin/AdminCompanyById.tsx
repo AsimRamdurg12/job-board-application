@@ -19,7 +19,6 @@ const AdminCompanyById: React.FC = () => {
     queryFn: async () => {
       const res = await axios.get(`${BACKEND_URL}/api/company/${params.id}`);
       const result = await res.data;
-      console.log(result);
 
       return result;
     },

@@ -55,7 +55,7 @@ const CreateCompany = () => {
         }
       );
 
-      return res.data; // Assuming API response has data
+      return res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["companies"] });

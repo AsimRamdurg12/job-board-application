@@ -12,8 +12,6 @@ const AdminCompanies = () => {
       const res = await axios.get(`${BACKEND_URL}/api/company/mycompanies`);
       const result = await res.data;
 
-      console.log(result);
-
       return result;
     },
   });
@@ -47,12 +45,12 @@ const AdminCompanies = () => {
                 job: string;
                 tagline: string;
               }) => (
-                <Link to={`/admin/company/${company._id}`} key={company._id}>
+                <Link to={`/admin/company/${company?._id}`} key={company?._id}>
                   <div className="flex gap-4 h-full border my-2 shadow-lg py-4 px-4 rounded-lg">
                     <div className="w-12 h-12">
                       <img
-                        src={company.logo}
-                        alt={company.name}
+                        src={company?.logo}
+                        alt={company?.name}
                         className="w-full rounded-lg h-full"
                       />
                     </div>
@@ -60,15 +58,15 @@ const AdminCompanies = () => {
                       <div className="space-y-2">
                         <div>
                           <h1 className="text-xl font-semibold">
-                            {company.name}
+                            {company?.name}
                           </h1>
                           <p className="text-xs text-gray-500">
-                            {company.job.length === 1
+                            {company?.job?.length === 1
                               ? "1 Job Opening"
-                              : `${company.job.length} Job Openings`}
+                              : `${company?.job?.length} Job Openings`}
                           </p>
                         </div>
-                        <div className="text-gray-600">{company.tagline}</div>
+                        <div className="text-gray-600">{company?.tagline}</div>
                       </div>
                       <div>
                         <img src={arrowright} alt="arrow" className="h-4 w-4" />

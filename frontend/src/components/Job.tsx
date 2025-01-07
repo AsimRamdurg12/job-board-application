@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 
 //@ts-expect-error job
 const Job = ({ job }) => {
-  console.log(job.company);
-
   return (
     <div className="mt-3">
       <Link to={`/job/${job?._id}`}>

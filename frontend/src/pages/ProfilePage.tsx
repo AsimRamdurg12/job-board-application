@@ -72,7 +72,7 @@ const ProfilePage: React.FC = () => {
         <div className="text-center text-sm">
           Bio:
           <p className="text-gray-600">
-            {authUser?.profile?.bio === undefined ? "" : authUser?.profile.bio}
+            {authUser?.profile?.bio === undefined ? "" : authUser?.profile?.bio}
           </p>
         </div>
         <div className="text-gray-700 flex gap-4">

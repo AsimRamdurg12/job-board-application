@@ -69,8 +69,6 @@ const UpdateCompany = () => {
         }
       );
 
-      console.log(res.data);
-
       return res.data; // Assuming API response has data
     },
     onSuccess: () => {

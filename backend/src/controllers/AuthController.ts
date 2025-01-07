@@ -3,7 +3,7 @@ import { UserModel } from "../models/UserModel";
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
 import getDataUri from "../utils/datauri";
-import { string, z } from "zod";
+import { z } from "zod";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req: Request, res: Response) => {
@@ -113,10 +113,10 @@ export const login = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   try {
     res.clearCookie("jwt", {
-    httpOnly: true,
-    secure: true, // Should match how the cookie was set
-    sameSite: "none", // Required for cross-origin cookies
-  });
+      httpOnly: true,
+      secure: true, // Should match how the cookie was set
+      sameSite: "none", // Required for cross-origin cookies
+    });
     res.status(200).json("Logged Out Successfully");
     return;
   } catch (error: any) {

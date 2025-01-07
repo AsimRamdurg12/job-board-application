@@ -8,7 +8,6 @@ import AuthRoutes from "./routes/AuthRoutes";
 import CompanyRoutes from "./routes/CompanyRoutes";
 import JobRoutes from "./routes/JobRoutes";
 import ApplicationRoutes from "./routes/ApplicationRoutes";
-import path from "path";
 
 const app = express();
 dotenv.config();
@@ -24,14 +23,6 @@ cloudinary.config({
 app.use(express.json({ limit: "5mb" }));
 app.use(
   cors({
-    origin: "https://job-board-application-r7bl.onrender.com",
-    credentials: true,
-  })
-);
-
-app.options(
-  "*",
-  cors({
     origin: "http://localhost:5173",
     credentials: true,
   })
@@ -40,7 +31,7 @@ app.options(
 app.options(
   "*",
   cors({
-    origin: "https://job-board-application-r7bl.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );

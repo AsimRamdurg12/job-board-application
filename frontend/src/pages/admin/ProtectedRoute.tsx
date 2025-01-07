@@ -12,7 +12,7 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (authUser === null || authUser.role !== "recruiter") {
+    if (authUser === null || authUser?.role !== "recruiter") {
       navigate("/");
     }
   });

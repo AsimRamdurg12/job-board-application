@@ -26,8 +26,6 @@ const JobById = () => {
       const response = await axios.get(`${BACKEND_URL}/api/job/${params.id}`);
       const result = await response.data;
 
-      console.log(result.createdAt);
-
       if (Array.isArray(result.applications)) {
         //@ts-expect-error applicant
         setApplicants(result.applications.map((app) => app.applicant));
@@ -99,7 +97,7 @@ const JobById = () => {
                 <Link to={`/company/${jobbyid?.company?._id}`}>
                   <img
                     src={jobbyid?.company?.logo}
-                    alt={jobbyid.company?.name}
+                    alt={jobbyid?.company?.name}
                     className="w-14 h-14 rounded-lg"
                   />
                 </Link>
