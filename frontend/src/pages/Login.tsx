@@ -150,8 +150,9 @@ const Login: React.FC = () => {
           </div>
           {/* Submit Button */}
           <button
+            disabled={`${isPending ? true : false}`}
             type="submit"
-            className="py-2 px-6 border rounded-lg bg-orange-500 text-xl font-medium text-white"
+            className={`py-2 px-6 border rounded-lg text-xl font-medium text-white ${isPending ? "bg-orange-300" : "bg-orange-500"}`}
           >
             {isPending ? "Logging in" : "Login"}
           </button>
@@ -159,6 +160,13 @@ const Login: React.FC = () => {
             {isError && "Please Check the credentials"}
           </p>
         </form>
+
+        <p className="mt-4 text-sm text-center text-gray-500">
+          Don't have an account?{" "}
+          <a href="/signup" className="underline">
+            signup
+          </a>
+        </p>
       </div>
     </section>
   );
