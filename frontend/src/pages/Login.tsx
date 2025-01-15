@@ -150,7 +150,7 @@ const Login: React.FC = () => {
           </div>
           {/* Submit Button */}
           <button
-            disabled={`${isPending ? true : false}`}
+            disabled={isPending ? true : false}
             type="submit"
             className={`py-2 px-6 border rounded-lg text-xl font-medium text-white ${isPending ? "bg-orange-300" : "bg-orange-500"}`}
           >
